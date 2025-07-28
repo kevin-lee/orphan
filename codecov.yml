@@ -1,0 +1,8 @@
+ignore:
+  - "docs"
+  - "generated-docs"
+  - "website"
+
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default

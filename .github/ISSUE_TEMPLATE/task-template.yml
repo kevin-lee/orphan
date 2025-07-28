@@ -2,44 +2,44 @@ name: Task
 description: For any non-bug task ticket
 labels: ["task"]
 assignees:
-- kevin-lee
-  body:
-- type: markdown
-  attributes:
-  value: |
-  # Task
-  Add task details
+  - kevin-lee
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Task
+        Add task details
 
-- type: textarea
-  id: summary
-  attributes:
-  label: Summary
-  description: The summary of ths task
-  placeholder: Add abcdef ... for blah
-  validations:
-  required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: The summary of ths task
+      placeholder: Add abcdef ... for blah
+    validations:
+      required: true
 
-- type: markdown
-  attributes:
-  value: |
-  ----
+  - type: markdown
+    attributes:
+      value: |
+        ----
+        
+        # Project Details
 
-      # Project Details
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Please provide the orphan version
+      placeholder: 0.1.0
+    validations:
+      required: true
 
-- type: input
-  id: version
-  attributes:
-  label: Version
-  description: Please provide the version of `orphan`
-  placeholder: `0.1.0`
-  validations:
-  required: true
-
-- type: textarea
-  id: description
-  attributes:
-  label: Description
-  description: The description of the task
-  placeholder: Add more detailed description of the task
-  validations:
-  required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: The description of the task
+      placeholder: Add more detailed description of the task
+    validations:
+      required: false

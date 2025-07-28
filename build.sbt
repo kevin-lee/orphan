@@ -50,7 +50,12 @@ lazy val orphan = (project in file("."))
 lazy val orphanCats    = module("cats", crossProject(JVMPlatform, JSPlatform))
   .settings(
     libraryDependencies ++= List(libs.cats.value % Optional) ++ (
-      if (isScala3(scalaVersion.value)) List.empty else List(libs.scalacCompatAnnotation)
+      if (isScala3(scalaVersion.value)) List.empty
+      else
+        List(
+          libs.scalacCompatAnnotation,
+          libs.tests.scalaReflect.value
+        )
     ),
   )
 lazy val orphanCatsJvm = orphanCats.jvm
@@ -124,6 +129,10 @@ lazy val libs = new {
         "qa.hedgehog" %%% "hedgehog-runner" % props.HedgehogVersion,
         "qa.hedgehog" %%% "hedgehog-sbt"    % props.HedgehogVersion,
       ).map(_ % Test)
+    }
+
+    lazy val scalaReflect = Def.setting {
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value % Test
     }
 
   }

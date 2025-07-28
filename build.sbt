@@ -38,6 +38,38 @@ ThisBuild / scalafixConfig := (
 lazy val orphan = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)
   .settings(noPublish)
+  .aggregate(
+    orphanCatsJvm,
+    orphanCatsJs,
+    orphanCatsTestWithoutCatsJvm,
+    orphanCatsTestWithoutCatsJs,
+    orphanCatsTestWithCatsJvm,
+    orphanCatsTestWithCatsJs,
+  )
+
+lazy val orphanCats    = module("cats", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    libraryDependencies ++= List(libs.cats.value % Optional) ++ (
+      if (isScala3(scalaVersion.value)) List.empty else List(libs.scalacCompatAnnotation)
+    ),
+  )
+lazy val orphanCatsJvm = orphanCats.jvm
+lazy val orphanCatsJs  = orphanCats.js.settings(jsCommonSettings)
+
+lazy val orphanCatsTestWithoutCats    = module("cats-test-without-cats", crossProject(JVMPlatform, JSPlatform))
+  .settings(noPublish)
+  .dependsOn(orphanCats % props.IncludeTest)
+lazy val orphanCatsTestWithoutCatsJvm = orphanCatsTestWithoutCats.jvm
+lazy val orphanCatsTestWithoutCatsJs  = orphanCatsTestWithoutCats.js.settings(jsCommonSettings)
+
+lazy val orphanCatsTestWithCats    = module("cats-test-with-cats", crossProject(JVMPlatform, JSPlatform))
+  .settings(noPublish)
+  .settings(
+    libraryDependencies ++= List(libs.cats.value),
+  )
+  .dependsOn(orphanCats % props.IncludeTest)
+lazy val orphanCatsTestWithCatsJvm = orphanCatsTestWithCats.jvm
+lazy val orphanCatsTestWithCatsJs  = orphanCatsTestWithCats.js.settings(jsCommonSettings)
 
 lazy val props =
   new {

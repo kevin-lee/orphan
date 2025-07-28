@@ -5,7 +5,7 @@ package orphan_test
   */
 object ExpectedMessages {
   val ExpectedMessageForCatsFunctor: String =
-    """error: Missing an instance of `CatsFunctor` which means you're trying to use cats.Functor, but cats library is missing in your project config. If you want to have an instance of cats.Functor[F[*]] provided by extras, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt
+    """error: Missing an instance of `CatsFunctor` which means you're trying to use cats.Functor, but cats library is missing in your project config. If you want to have an instance of cats.Functor[F[*]] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt
       |orphan_instance.OrphanCatsInstances.MyBox.catsFunctor
       |                                          ^""".stripMargin
 }

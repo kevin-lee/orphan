@@ -15,13 +15,30 @@ object OrphanCatsInstances {
     def apply[F[*]: MyFunctor]: MyFunctor[F] = summon[MyFunctor[F]]
   }
 
-  final case class MyBox[A](a: A)
-  object MyBox extends OrphanCats {
+  trait MyApplicative[F[*]] {
+    def pure[A](a: A): F[A]
+    def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
+  }
+  object MyApplicative {
+    def apply[F[*]: MyApplicative]: MyApplicative[F] = summon[MyApplicative[F]]
+  }
 
-    given myboxMyFunctor: MyFunctor[MyBox] with {
+  final case class MyBox[A](a: A)
+  object MyBox extends CatsInstances2 {
+
+    given myBoxMyFunctor: MyFunctor[MyBox] with {
       override def map[A, B](fa: MyBox[A])(f: A => B): MyBox[B] = fa.copy(f(fa.a))
     }
 
+    given myBoxMyApplicative: MyApplicative[MyBox] with {
+      override def pure[A](a: A): MyBox[A] = MyBox(a)
+
+      override def ap[A, B](ff: MyBox[A => B])(fa: MyBox[A]): MyBox[B] = pure(ff.a(fa.a))
+    }
+
+  }
+
+  private[orphan_instance] trait CatsInstances2 extends CatsInstances1 {
     @nowarn(
       """msg=evidence parameter .+ of type (.+\.)*CatsFunctor\[F\] in method catsFunctor is never used"""
     )
@@ -30,4 +47,17 @@ object OrphanCatsInstances {
       override def map[A, B](fa: MyBox[A])(f: A => B): MyBox[B] = fa.copy(f(fa.a))
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
+
+  private[orphan_instance] trait CatsInstances1 extends OrphanCats {
+    @nowarn(
+      """msg=evidence parameter .+ of type (.+\.)*CatsFunctor\[F\] in method catsFunctor is never used"""
+    )
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+    given catsApplicative[F[*[*]]: CatsApplicative]: F[MyBox] = new cats.Applicative[MyBox] {
+      override def pure[A](a: A): MyBox[A] = MyBox(a)
+
+      override def ap[A, B](ff: MyBox[A => B])(fa: MyBox[A]): MyBox[B] = pure(ff.a(fa.a))
+    }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
+  }
+
 }

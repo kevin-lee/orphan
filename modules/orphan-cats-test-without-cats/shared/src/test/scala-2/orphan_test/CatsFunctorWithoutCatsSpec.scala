@@ -8,14 +8,14 @@ import orphan_instance.OrphanCatsInstances.{MyBox, MyFunctor}
 /** @author Kevin Lee
   * @since 2025-07-28
   */
-object CatsFunctorSpec extends Properties {
+object CatsFunctorWithoutCatsSpec extends Properties {
 
   override def tests: List[Test] = List(
-    property("test MyFunctor", testMyFunctor),
+    property("test MyFunctor.map", testMyFunctorMap),
     example("test CatsFunctor", testCatsFunctor),
   )
 
-  def testMyFunctor: Property = for {
+  def testMyFunctorMap: Property = for {
     n     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
     myBox <- Gen.constant(MyBox(n)).log("myBox")
   } yield {
@@ -25,7 +25,9 @@ object CatsFunctorSpec extends Properties {
   }
 
   def testCatsFunctor: Result = {
-    val expected = ExpectedMessages.ExpectedMessageForCatsFunctor
+    val expected = s"""error: ${ExpectedMessages.ExpectedMessageForCatsFunctor}
+                      |orphan_instance.OrphanCatsInstances.MyBox.catsFunctor
+                      |                                          ^""".stripMargin
 
     val actual = CompileTimeError.from(
       "orphan_instance.OrphanCatsInstances.MyBox.catsFunctor"

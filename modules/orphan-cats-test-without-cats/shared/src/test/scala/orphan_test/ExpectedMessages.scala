@@ -10,4 +10,7 @@ object ExpectedMessages {
   val ExpectedMessageForCatsApplicative: String =
     """Missing an instance of `CatsApplicative` which means you're trying to use cats.Applicative, but cats library is missing in your project config. If you want to have an instance of cats.Applicative[F[*]] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
 
+  val ExpectedMessageForCatsMonad: String =
+    """Missing an instance of `CatsMonad` which means you're trying to use cats.Monad, but cats library is missing in your project config. If you want to have an instance of cats.Monad[F[*]] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+
 }

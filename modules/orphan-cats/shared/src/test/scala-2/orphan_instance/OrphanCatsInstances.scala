@@ -3,6 +3,8 @@ package orphan_instance
 import org.typelevel.scalaccompat.annotation.nowarn213
 import orphan.OrphanCats
 
+import scala.annotation.tailrec
+
 /** @author Kevin Lee
   * @since 2025-07-28
   */
@@ -22,8 +24,17 @@ object OrphanCatsInstances {
     def apply[F[*]: MyApplicative]: MyApplicative[F] = implicitly[MyApplicative[F]]
   }
 
+  trait MyMonad[F[*]] {
+    def pure[A](a: A): F[A]
+    def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
+    def tailRecM[A, B](a: A)(f: A => F[Either[A, B]]): F[B]
+  }
+  object MyMonad {
+    def apply[F[*]: MyMonad]: MyMonad[F] = implicitly[MyMonad[F]]
+  }
+
   final case class MyBox[A](a: A)
-  object MyBox extends MyCatsInstances2 {
+  object MyBox extends MyCatsInstances {
 
     implicit def myBoxMyFunctor: MyFunctor[MyBox] = new MyFunctor[MyBox] {
       override def map[A, B](fa: MyBox[A])(f: A => B): MyBox[B] = fa.copy(f(fa.a))
@@ -35,9 +46,21 @@ object OrphanCatsInstances {
       override def ap[A, B](ff: MyBox[A => B])(fa: MyBox[A]): MyBox[B] = pure(ff.a(fa.a))
     }
 
+    implicit def myBoxMyMonad: MyMonad[MyBox] = new MyMonad[MyBox] {
+      override def pure[A](a: A): MyBox[A] = MyBox(a)
+
+      override def flatMap[A, B](fa: MyBox[A])(f: A => MyBox[B]): MyBox[B] = f(fa.a)
+
+      @tailrec
+      override def tailRecM[A, B](a: A)(f: A => MyBox[Either[A, B]]): MyBox[B] = f(a) match {
+        case MyBox(Right(b)) => pure(b)
+        case MyBox(Left(a)) => tailRecM(a)(f)
+      }
+    }
+
   }
 
-  private[orphan_instance] trait MyCatsInstances2 extends MyCatsInstances1 {
+  private[orphan_instance] trait MyCatsInstances extends MyCatsInstances1 {
     @nowarn213(
       """msg=evidence parameter .+ of type (.+\.)*CatsFunctor\[F\] in method catsFunctor is never used"""
     )
@@ -47,7 +70,7 @@ object OrphanCatsInstances {
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsInstances1 extends OrphanCats {
+  private[orphan_instance] trait MyCatsInstances1 extends MyCatsInstances2 {
     @nowarn213(
       """msg=evidence parameter .+ of type (.+\.)*CatsApplicative\[F\] in method catsApplicative is never used"""
     )
@@ -56,6 +79,24 @@ object OrphanCatsInstances {
       override def pure[A](a: A): MyBox[A] = MyBox(a)
 
       override def ap[A, B](ff: MyBox[A => B])(fa: MyBox[A]): MyBox[B] = pure(ff.a(fa.a))
+    }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
+  }
+
+  private[orphan_instance] trait MyCatsInstances2 extends OrphanCats {
+    @nowarn213(
+      """msg=evidence parameter .+ of type (.+\.)*CatsMonad\[F\] in method catsMonad is never used"""
+    )
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+    implicit def catsMonad[F[*[*]]: CatsMonad]: F[MyBox] = new cats.Monad[MyBox] {
+      override def pure[A](x: A): MyBox[A] = MyBox(x)
+
+      override def flatMap[A, B](fa: MyBox[A])(f: A => MyBox[B]): MyBox[B] = f(fa.a)
+
+      @tailrec
+      override def tailRecM[A, B](a: A)(f: A => MyBox[Either[A, B]]): MyBox[B] = f(a) match {
+        case MyBox(Right(b)) => pure(b)
+        case MyBox(Left(a)) => tailRecM(a)(f)
+      }
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 

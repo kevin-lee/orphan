@@ -9,6 +9,7 @@ trait OrphanCats {
   final protected type CatsFunctor[F[*[*]]]     = OrphanCats.CatsFunctor[F]
   final protected type CatsApplicative[F[*[*]]] = OrphanCats.CatsApplicative[F]
   final protected type CatsMonad[F[*[*]]]       = OrphanCats.CatsMonad[F]
+  final protected type CatsTraverse[F[*[*]]]    = OrphanCats.CatsTraverse[F]
 }
 private[orphan] object OrphanCats {
   @implicitNotFound(
@@ -47,6 +48,19 @@ private[orphan] object OrphanCats {
   private[OrphanCats] object CatsMonad {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     @inline implicit final def getCatsMonad: CatsMonad[cats.Monad] =
+      null // scalafix:ok DisableSyntax.null
+  }
+
+  @implicitNotFound(
+    msg = "Missing an instance of `CatsTraverse` which means you're trying to use cats.Traverse, " +
+      "but cats library is missing in your project config. " +
+      "If you want to have an instance of cats.Traverse[F[*]] provided, " +
+      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+  )
+  sealed protected trait CatsTraverse[F[*[*]]]
+  private[OrphanCats] object CatsTraverse {
+    @SuppressWarnings(Array("org.wartremover.warts.Null"))
+    @inline implicit final def getCatsTraverse: CatsTraverse[cats.Traverse] =
       null // scalafix:ok DisableSyntax.null
   }
 

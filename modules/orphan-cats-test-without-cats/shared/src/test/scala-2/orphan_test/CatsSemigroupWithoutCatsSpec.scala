@@ -11,11 +11,11 @@ import orphan_instance.OrphanCatsKernelInstances.{MyNum, MySemigroup}
 object CatsSemigroupWithoutCatsSpec extends Properties {
 
   override def tests: List[Test] = List(
-    property("test MySemigroup.combine", testMySemigroupMap),
-    example("test CatsSemigroup.combine", testCatsSemigroup),
+    property("test MySemigroup.combine", testMySemigroupCombine),
+    example("test CatsSemigroup", testCatsSemigroup),
   )
 
-  def testMySemigroupMap: Property = for {
+  def testMySemigroupCombine: Property = for {
     n1     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n1")
     n2     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n2")
     myNum1 <- Gen.constant(MyNum(n1)).log("myNum1")

@@ -34,6 +34,20 @@ object OrphanCatsInstances {
     def apply[F[*]: MyMonad]: MyMonad[F] = summon[MyMonad[F]]
   }
 
+  class MyEval[A](val thunk: () => A) extends AnyVal
+  object MyEval {
+    def apply[A](a: => A): MyEval[A] = new MyEval[A](() => a)
+  }
+
+  trait MyTraverse[F[*]] {
+    def traverse[G[_]: MyApplicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
+    def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B
+    def foldRight[A, B](fa: F[A], lb: MyEval[B])(f: (A, MyEval[B]) => MyEval[B]): MyEval[B]
+  }
+  object MyTraverse {
+    def apply[F[*]: MyTraverse]: MyTraverse[F] = summon[MyTraverse[F]]
+  }
+
   final case class MyBox[A](a: A)
   object MyBox extends CatsInstances {
 
@@ -57,6 +71,16 @@ object OrphanCatsInstances {
         case MyBox(Right(b)) => pure(b)
         case MyBox(Left(a)) => tailRecM(a)(f)
       }
+    }
+
+    given myBoxMyTraverse: MyTraverse[MyBox] with {
+      override def traverse[G[_]: MyApplicative, A, B](fa: MyBox[A])(f: A => G[B]): G[MyBox[B]] =
+        MyApplicative[G].map(f(fa.a))(MyBox(_))
+
+      override def foldLeft[A, B](fa: MyBox[A], b: B)(f: (B, A) => B): B = f(b, fa.a)
+
+      override def foldRight[A, B](fa: MyBox[A], lb: MyEval[B])(f: (A, MyEval[B]) => MyEval[B]): MyEval[B] =
+        f(fa.a, lb)
     }
 
   }
@@ -83,7 +107,7 @@ object OrphanCatsInstances {
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsInstances2 extends OrphanCats {
+  private[orphan_instance] trait MyCatsInstances2 extends MyCatsInstances3 {
     @nowarn(
       """msg=evidence parameter .+ of type (.+\.)*CatsMonad\[F\] in method catsMonad is never used"""
     )
@@ -98,6 +122,22 @@ object OrphanCatsInstances {
         case MyBox(Right(b)) => pure(b)
         case MyBox(Left(a)) => tailRecM(a)(f)
       }
+    }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
+  }
+
+  private[orphan_instance] trait MyCatsInstances3 extends OrphanCats {
+    @nowarn(
+      """msg=evidence parameter .+ of type (.+\.)*CatsTraverse\[F\] in method catsTraverse is never used"""
+    )
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+    given catsTraverse[F[*[*]]: CatsTraverse]: F[MyBox] = new cats.Traverse[MyBox] {
+      override def traverse[G[_]: cats.Applicative, A, B](fa: MyBox[A])(f: A => G[B]): G[MyBox[B]] =
+        cats.Applicative[G].map(f(fa.a))(MyBox(_))
+
+      override def foldLeft[A, B](fa: MyBox[A], b: B)(f: (B, A) => B): B = f(b, fa.a)
+
+      override def foldRight[A, B](fa: MyBox[A], lb: cats.Eval[B])(f: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
+        f(fa.a, lb)
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 

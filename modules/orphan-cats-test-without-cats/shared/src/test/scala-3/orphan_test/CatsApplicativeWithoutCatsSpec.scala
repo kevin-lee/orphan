@@ -11,6 +11,7 @@ object CatsApplicativeWithoutCatsSpec extends Properties {
 
   override def tests: List[Test] = List(
     property("test MyApplicative.pure", testMyApplicativePure),
+    property("test MyApplicative.map", testMyApplicativeMap),
     property("test MyApplicative.ap", testMyApplicativeAp),
     example("test cats.Applicative", testCatsApplicative),
   )
@@ -20,6 +21,15 @@ object CatsApplicativeWithoutCatsSpec extends Properties {
   } yield {
     val expected = MyBox(n)
     val actual   = MyApplicative[MyBox].pure(n)
+    actual ==== expected
+  }
+
+  def testMyApplicativeMap: Property = for {
+    n     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
+    myBox <- Gen.constant(MyBox(n)).log("myBox")
+  } yield {
+    val expected = MyBox(n * 2)
+    val actual   = MyApplicative[MyBox].map(myBox)(_ * 2)
     actual ==== expected
   }
 

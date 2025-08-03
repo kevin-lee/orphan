@@ -8,6 +8,7 @@ import scala.annotation.implicitNotFound
 trait OrphanCatsKernel {
   final protected type CatsSemigroup[F[*]] = OrphanCatsKernel.CatsSemigroup[F]
   final protected type CatsMonoid[F[*]]    = OrphanCatsKernel.CatsMonoid[F]
+  final protected type CatsEq[F[*]]        = OrphanCatsKernel.CatsEq[F]
 }
 private[orphan] object OrphanCatsKernel {
 
@@ -34,6 +35,19 @@ private[orphan] object OrphanCatsKernel {
   private[OrphanCatsKernel] object CatsMonoid {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsMonoid: CatsMonoid[cats.kernel.Monoid] =
+      null // scalafix:ok DisableSyntax.null
+  }
+
+  @implicitNotFound(
+    msg = "Missing an instance of `CatsEq` which means you're trying to use cats.kernel.Eq, " +
+      "but cats library is missing in your project config. " +
+      "If you want to have an instance of cats.kernel.Eq[A] provided, " +
+      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+  )
+  sealed protected trait CatsEq[F[*]]
+  private[OrphanCatsKernel] object CatsEq {
+    @SuppressWarnings(Array("org.wartremover.warts.Null"))
+    final inline given getCatsEq: CatsEq[cats.kernel.Eq] =
       null // scalafix:ok DisableSyntax.null
   }
 

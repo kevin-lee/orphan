@@ -2,12 +2,13 @@ package orphan_test
 
 import hedgehog.*
 import hedgehog.runner.*
+import orphan.testing.CompileTimeError
 import orphan_instance.OrphanCatsInstances.{MyApplicative, MyBox, MyEval, MyTraverse}
 
 /** @author Kevin Lee
   * @since 2025-07-28
   */
-object CatsTraverseWithCatsSpec extends Properties {
+object CatsTraverseWithoutCatsSpec extends Properties {
 
   override def tests: List[Test] = List(
     property("test MyTraverse.traverse", testMyTraverseTraverse),
@@ -16,7 +17,7 @@ object CatsTraverseWithCatsSpec extends Properties {
     example("test cats.Traverse", testCatsTraverse),
   )
 
-  given optionApplicative: MyApplicative[Option] with {
+  implicit def optionApplicative: MyApplicative[Option] = new MyApplicative[Option] {
     override def pure[A](a: A): Option[A] = Some(a)
 
     override def ap[A, B](ff: Option[A => B])(fa: Option[A]): Option[B] = fa.flatMap(a => ff.map(_(a)))
@@ -57,18 +58,14 @@ object CatsTraverseWithCatsSpec extends Properties {
   }
 
   def testCatsTraverse: Result = {
-    import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan_test.ExpectedMessages.ExpectedMessageForCatsTraverse
+    val expected = s"""error: ${ExpectedMessages.ExpectedMessageForCatsTraverse}
+                      |orphan_instance.OrphanCatsInstances.MyBox.catsTraverse
+                      |                                          ^""".stripMargin
 
-    val actual = typeCheckErrors(
-      """
-        val _ =  orphan_instance.OrphanCatsInstances.MyBox.catsTraverse
-      """
+    val actual = CompileTimeError.from(
+      "orphan_instance.OrphanCatsInstances.MyBox.catsTraverse"
     )
-
-    val actualErrorMessage = actual.map(_.message).mkString
-    (actualErrorMessage ==== expectedMessage)
-
+    actual ==== expected
   }
 
 }

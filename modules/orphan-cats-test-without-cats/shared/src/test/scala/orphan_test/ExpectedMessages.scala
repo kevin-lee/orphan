@@ -25,4 +25,7 @@ object ExpectedMessages {
   val ExpectedMessageForCatsEq: String =
     """Missing an instance of `CatsEq` which means you're trying to use cats.kernel.Eq, but cats library is missing in your project config. If you want to have an instance of cats.kernel.Eq[A] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
 
+  val ExpectedMessageForCatsHash: String =
+    """Missing an instance of `CatsHash` which means you're trying to use cats.kernel.Hash, but cats library is missing in your project config. If you want to have an instance of cats.kernel.Hash[A] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+
 }

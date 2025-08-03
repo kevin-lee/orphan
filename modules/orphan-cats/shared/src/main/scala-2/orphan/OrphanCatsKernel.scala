@@ -10,6 +10,7 @@ trait OrphanCatsKernel {
   final protected type CatsMonoid[F[*]]    = OrphanCatsKernel.CatsMonoid[F]
   final protected type CatsEq[F[*]]        = OrphanCatsKernel.CatsEq[F]
   final protected type CatsHash[F[*]]      = OrphanCatsKernel.CatsHash[F]
+  final protected type CatsOrder[F[*]]     = OrphanCatsKernel.CatsOrder[F]
 }
 private[orphan] object OrphanCatsKernel {
 
@@ -62,6 +63,19 @@ private[orphan] object OrphanCatsKernel {
   private[OrphanCatsKernel] object CatsHash {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     @inline implicit final def getCatsHash: CatsHash[cats.kernel.Hash] =
+      null // scalafix:ok DisableSyntax.null
+  }
+
+  @implicitNotFound(
+    msg = "Missing an instance of `CatsOrder` which means you're trying to use cats.kernel.Order, " +
+      "but cats library is missing in your project config. " +
+      "If you want to have an instance of cats.kernel.Order[A] provided, " +
+      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+  )
+  sealed protected trait CatsOrder[F[*]]
+  private[OrphanCatsKernel] object CatsOrder {
+    @SuppressWarnings(Array("org.wartremover.warts.Null"))
+    @inline implicit final def getCatsOrder: CatsOrder[cats.kernel.Order] =
       null // scalafix:ok DisableSyntax.null
   }
 

@@ -38,6 +38,13 @@ object OrphanCatsKernelInstances {
     def apply[A: MyHash]: MyHash[A] = implicitly[MyHash[A]]
   }
 
+  trait MyOrder[A] {
+    def compare(x: A, y: A): Int
+  }
+  object MyOrder {
+    def apply[A: MyOrder]: MyOrder[A] = implicitly[MyOrder[A]]
+  }
+
   final case class MyNum(n: Int)
   object MyNum extends MyCatsKernelInstances {
     implicit def myNumMySemigroup: MySemigroup[MyNum] = new MySemigroup[MyNum] {
@@ -61,6 +68,10 @@ object OrphanCatsKernelInstances {
 
       @SuppressWarnings(Array("org.wartremover.warts.Equals"))
       override def eqv(x: MyNum, y: MyNum): Boolean = x == y
+    }
+
+    implicit def myNumMyOrder: MyOrder[MyNum] = new MyOrder[MyNum] {
+      override def compare(x: MyNum, y: MyNum): Int = x.n.compare(y.n)
     }
 
   }
@@ -97,7 +108,7 @@ object OrphanCatsKernelInstances {
     }.asInstanceOf[F[MyNum]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsKernelInstances3 extends OrphanCatsKernel {
+  private[orphan_instance] trait MyCatsKernelInstances3 extends MyCatsKernelInstances4 {
     @nowarn213(
       """msg=evidence parameter .+ of type (.+\.)*CatsHash\[F\] in method catsHash is never used"""
     )
@@ -106,6 +117,16 @@ object OrphanCatsKernelInstances {
       override def hash(x: MyNum): Int = x.##
 
       override def eqv(x: MyNum, y: MyNum): Boolean = cats.kernel.Eq[Int].eqv(x.n, y.n)
+    }.asInstanceOf[F[MyNum]] // scalafix:ok DisableSyntax.asInstanceOf
+  }
+
+  private[orphan_instance] trait MyCatsKernelInstances4 extends OrphanCatsKernel {
+    @nowarn213(
+      """msg=evidence parameter .+ of type (.+\.)*CatsOrder\[F\] in method catsOrder is never used"""
+    )
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+    implicit def catsOrder[F[*]: CatsOrder]: F[MyNum] = new cats.kernel.Order[MyNum] {
+      override def compare(x: MyNum, y: MyNum): Int = x.n.compare(y.n)
     }.asInstanceOf[F[MyNum]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 

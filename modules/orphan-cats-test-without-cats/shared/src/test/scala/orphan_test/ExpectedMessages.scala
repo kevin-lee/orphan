@@ -16,4 +16,7 @@ object ExpectedMessages {
   val ExpectedMessageForCatsSemigroup: String =
     """Missing an instance of `CatsSemigroup` which means you're trying to use cats.kernel.Semigroup, but cats library is missing in your project config. If you want to have an instance of cats.kernel.Semigroup[F[*]] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
 
+  val ExpectedMessageForCatsMonoid: String =
+    """Missing an instance of `CatsMonoid` which means you're trying to use cats.kernel.Monoid, but cats library is missing in your project config. If you want to have an instance of cats.kernel.Monoid[F[*]] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+
 }

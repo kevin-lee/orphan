@@ -12,9 +12,10 @@ object CatsApplicativeWithCatsSpec extends Properties {
 
   override def tests: List[Test] = List(
     property("test MyApplicative.pure", testMyApplicativePure),
+    property("test MyApplicative.map", testMyApplicativeMap),
     property("test MyApplicative.ap", testMyApplicativeAp),
-    property("test cats.Applicative.map", testCatsApplicativeMap),
     property("test cats.Applicative.pure", testCatsApplicativePure),
+    property("test cats.Applicative.map", testCatsApplicativeMap),
     property("test cats.Applicative.ap", testCatsApplicativeAp),
   )
 
@@ -23,6 +24,15 @@ object CatsApplicativeWithCatsSpec extends Properties {
   } yield {
     val expected = MyBox(n)
     val actual   = MyApplicative[MyBox].pure(n)
+    actual ==== expected
+  }
+
+  def testMyApplicativeMap: Property = for {
+    n     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
+    myBox <- Gen.constant(MyBox(n)).log("myBox")
+  } yield {
+    val expected = MyBox(n * 2)
+    val actual   = MyApplicative[MyBox].map(myBox)(_ * 2)
     actual ==== expected
   }
 
@@ -38,20 +48,20 @@ object CatsApplicativeWithCatsSpec extends Properties {
     actual ==== expected
   }
 
+  def testCatsApplicativePure: Property = for {
+    n <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
+  } yield {
+    val expected = MyBox(n)
+    val actual   = Applicative[MyBox].pure(n)
+    actual ==== expected
+  }
+
   def testCatsApplicativeMap: Property = for {
     n     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
     myBox <- Gen.constant(MyBox(n)).log("myBox")
   } yield {
     val expected = MyBox(n * 2)
     val actual   = Applicative[MyBox].map(myBox)(_ * 2)
-    actual ==== expected
-  }
-
-  def testCatsApplicativePure: Property = for {
-    n <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
-  } yield {
-    val expected = MyBox(n)
-    val actual   = Applicative[MyBox].pure(n)
     actual ==== expected
   }
 

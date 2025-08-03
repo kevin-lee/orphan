@@ -22,4 +22,7 @@ object ExpectedMessages {
   val ExpectedMessageForCatsMonoid: String =
     """Missing an instance of `CatsMonoid` which means you're trying to use cats.kernel.Monoid, but cats library is missing in your project config. If you want to have an instance of cats.kernel.Monoid[A] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
 
+  val ExpectedMessageForCatsEq: String =
+    """Missing an instance of `CatsEq` which means you're trying to use cats.kernel.Eq, but cats library is missing in your project config. If you want to have an instance of cats.kernel.Eq[A] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+
 }

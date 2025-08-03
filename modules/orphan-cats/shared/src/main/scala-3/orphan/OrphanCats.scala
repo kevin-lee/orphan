@@ -6,12 +6,28 @@ import scala.annotation.implicitNotFound
   * @since 2025-07-28
   */
 trait OrphanCats {
+  final protected type CatsShow[F[*]] = OrphanCats.CatsShow[F]
+
   final protected type CatsFunctor[F[*[*]]]     = OrphanCats.CatsFunctor[F]
   final protected type CatsApplicative[F[*[*]]] = OrphanCats.CatsApplicative[F]
   final protected type CatsMonad[F[*[*]]]       = OrphanCats.CatsMonad[F]
   final protected type CatsTraverse[F[*[*]]]    = OrphanCats.CatsTraverse[F]
 }
 private[orphan] object OrphanCats {
+
+  @implicitNotFound(
+    msg = "Missing an instance of `CatsShow` which means you're trying to use cats.Show, " +
+      "but cats library is missing in your project config. " +
+      "If you want to have an instance of cats.Show[F[*]] provided, " +
+      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+  )
+  sealed protected trait CatsShow[F[*]]
+  private[OrphanCats] object CatsShow {
+    @SuppressWarnings(Array("org.wartremover.warts.Null"))
+    final inline given getCatsShow: CatsShow[cats.Show] =
+      null // scalafix:ok DisableSyntax.null
+  }
+
   @implicitNotFound(
     msg = "Missing an instance of `CatsFunctor` which means you're trying to use cats.Functor, " +
       "but cats library is missing in your project config. " +

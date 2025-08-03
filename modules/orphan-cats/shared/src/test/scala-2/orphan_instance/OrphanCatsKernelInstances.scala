@@ -30,6 +30,14 @@ object OrphanCatsKernelInstances {
     def apply[A: MyEq]: MyEq[A] = implicitly[MyEq[A]]
   }
 
+  trait MyHash[A] {
+    def hash(x: A): Int
+    def eqv(x: A, y: A): Boolean
+  }
+  object MyHash {
+    def apply[A: MyHash]: MyHash[A] = implicitly[MyHash[A]]
+  }
+
   final case class MyNum(n: Int)
   object MyNum extends MyCatsKernelInstances {
     implicit def myNumMySemigroup: MySemigroup[MyNum] = new MySemigroup[MyNum] {
@@ -43,6 +51,14 @@ object OrphanCatsKernelInstances {
     }
 
     implicit def myNumMyEq: MyEq[MyNum] = new MyEq[MyNum] {
+      @SuppressWarnings(Array("org.wartremover.warts.Equals"))
+      override def eqv(x: MyNum, y: MyNum): Boolean = x == y
+    }
+
+    implicit def myNumMyHash: MyHash[MyNum] = new MyHash[MyNum] {
+
+      override def hash(x: MyNum): Int = x.##
+
       @SuppressWarnings(Array("org.wartremover.warts.Equals"))
       override def eqv(x: MyNum, y: MyNum): Boolean = x == y
     }
@@ -71,12 +87,24 @@ object OrphanCatsKernelInstances {
     }.asInstanceOf[F[MyNum]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsKernelInstances2 extends OrphanCatsKernel {
+  private[orphan_instance] trait MyCatsKernelInstances2 extends MyCatsKernelInstances3 {
     @nowarn213(
       """msg=evidence parameter .+ of type (.+\.)*CatsEq\[F\] in method catsEq is never used"""
     )
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsEq[F[*]: CatsEq]: F[MyNum] = new cats.kernel.Eq[MyNum] {
+      override def eqv(x: MyNum, y: MyNum): Boolean = cats.kernel.Eq[Int].eqv(x.n, y.n)
+    }.asInstanceOf[F[MyNum]] // scalafix:ok DisableSyntax.asInstanceOf
+  }
+
+  private[orphan_instance] trait MyCatsKernelInstances3 extends OrphanCatsKernel {
+    @nowarn213(
+      """msg=evidence parameter .+ of type (.+\.)*CatsHash\[F\] in method catsHash is never used"""
+    )
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+    implicit def catsHash[F[*]: CatsHash]: F[MyNum] = new cats.kernel.Hash[MyNum] {
+      override def hash(x: MyNum): Int = x.##
+
       override def eqv(x: MyNum, y: MyNum): Boolean = cats.kernel.Eq[Int].eqv(x.n, y.n)
     }.asInstanceOf[F[MyNum]] // scalafix:ok DisableSyntax.asInstanceOf
   }

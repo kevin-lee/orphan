@@ -4,7 +4,9 @@
 [![Release](https://github.com/kevin-lee/orphan/actions/workflows/release.yml/badge.svg)](https://github.com/kevin-lee/orphan/actions/workflows/release.yml)
 ![Maven Central Version](https://img.shields.io/maven-central/v/io.kevinlee/orphan-cats_3)
 
-No more orphans for orphan instances
+No more orphans for orphan instances.
+
+Adopt `orphan-cats`, and they're no longer orphans!
 
 |     Project | Maven Central                                                                                                                                                 |
 |------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------|

@@ -2,7 +2,7 @@ package orphan_test
 
 import hedgehog.*
 import hedgehog.runner.*
-import orphan.testing.CompileTimeError
+import extras.testing.CompileTimeError
 import orphan_instance.OrphanCatsInstances.{MyBox, MyShow}
 
 /** @author Kevin Lee

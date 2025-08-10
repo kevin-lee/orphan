@@ -63,6 +63,9 @@ lazy val orphanCatsJs  = orphanCats.js.settings(jsCommonSettings)
 
 lazy val orphanCatsTestWithoutCats    = module("cats-test-without-cats", crossProject(JVMPlatform, JSPlatform))
   .settings(noPublish)
+  .settings(
+    libraryDependencies ++= List(libs.tests.extrasTestingTools.value),
+  )
   .dependsOn(orphanCats % props.IncludeTest)
 lazy val orphanCatsTestWithoutCatsJvm = orphanCatsTestWithoutCats.jvm
 lazy val orphanCatsTestWithoutCatsJs  = orphanCatsTestWithoutCats.js.settings(jsCommonSettings)
@@ -70,7 +73,7 @@ lazy val orphanCatsTestWithoutCatsJs  = orphanCatsTestWithoutCats.js.settings(js
 lazy val orphanCatsTestWithCats    = module("cats-test-with-cats", crossProject(JVMPlatform, JSPlatform))
   .settings(noPublish)
   .settings(
-    libraryDependencies ++= List(libs.cats.value),
+    libraryDependencies ++= List(libs.cats.value % Test),
   )
   .dependsOn(orphanCats % props.IncludeTest)
 lazy val orphanCatsTestWithCatsJvm = orphanCatsTestWithCats.jvm
@@ -108,6 +111,8 @@ lazy val props =
 
     val HedgehogVersion = "0.10.1"
 
+    val ExtrasVersion = "0.47.0"
+
     val CatsVersion = "2.8.0"
 
     val ScalacCompatAnnotationVersion = "0.1.4"
@@ -134,6 +139,8 @@ lazy val libs = new {
     lazy val scalaReflect = Def.setting {
       "org.scala-lang" % "scala-reflect" % scalaVersion.value % Test
     }
+
+    lazy val extrasTestingTools = Def.setting("io.kevinlee" %%% "extras-testing-tools" % props.ExtrasVersion % Test)
 
   }
 }

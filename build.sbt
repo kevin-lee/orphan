@@ -45,6 +45,14 @@ lazy val orphan = (project in file("."))
     orphanCatsTestWithoutCatsJs,
     orphanCatsTestWithCatsJvm,
     orphanCatsTestWithCatsJs,
+    orphanCirceJvm,
+    orphanCirceJs,
+    orphanCirceTestJvm,
+    orphanCirceTestJs,
+    orphanCirceTestWithoutCirceJvm,
+    orphanCirceTestWithoutCirceJs,
+    orphanCirceTestWithCirceJvm,
+    orphanCirceTestWithCirceJs,
   )
 
 lazy val orphanCats    = module("cats", crossProject(JVMPlatform, JSPlatform))
@@ -78,6 +86,55 @@ lazy val orphanCatsTestWithCats    = module("cats-test-with-cats", crossProject(
   .dependsOn(orphanCats % props.IncludeTest)
 lazy val orphanCatsTestWithCatsJvm = orphanCatsTestWithCats.jvm
 lazy val orphanCatsTestWithCatsJs  = orphanCatsTestWithCats.js.settings(jsCommonSettings)
+
+lazy val orphanCirce    = module("circe", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    libraryDependencies ++= List(
+      libs.circeCore.value % Optional,
+    ) ++ (
+      if (isScala3(scalaVersion.value)) List.empty
+      else
+        List(
+          libs.scalacCompatAnnotation,
+          libs.tests.scalaReflect.value
+        )
+    ),
+  )
+lazy val orphanCirceJvm = orphanCirce.jvm
+lazy val orphanCirceJs  = orphanCirce.js.settings(jsCommonSettings)
+
+lazy val orphanCirceTest    = module("circe-test", crossProject(JVMPlatform, JSPlatform))
+  .settings(noPublish)
+  .settings(
+    libraryDependencies ++= List(libs.circeGeneric.value % Optional),
+  )
+  .dependsOn(orphanCirce % props.IncludeTest)
+lazy val orphanCirceTestJvm = orphanCirceTest.jvm
+lazy val orphanCirceTestJs  = orphanCirceTest.js.settings(jsCommonSettings)
+
+lazy val orphanCirceTestWithoutCirce    = module("circe-test-without-circe", crossProject(JVMPlatform, JSPlatform))
+  .settings(noPublish)
+  .settings(
+    libraryDependencies ++= List(libs.tests.extrasTestingTools.value),
+    Test / libraryDependencies ~= (libs => libs.filterNot(_.name.startsWith("circe")))
+  )
+  .dependsOn(orphanCirceTest % props.IncludeTest)
+lazy val orphanCirceTestWithoutCirceJvm = orphanCirceTestWithoutCirce.jvm
+lazy val orphanCirceTestWithoutCirceJs  = orphanCirceTestWithoutCirce.js.settings(jsCommonSettings)
+
+lazy val orphanCirceTestWithCirce    = module("circe-test-with-circe", crossProject(JVMPlatform, JSPlatform))
+  .settings(noPublish)
+  .settings(
+    libraryDependencies ++= List(
+      libs.circeCore.value    % Test,
+      libs.circeGeneric.value % Test,
+      libs.circeJawn.value    % Test,
+      libs.circeLiteral.value % Test,
+    ),
+  )
+  .dependsOn(orphanCirceTest % props.IncludeTest)
+lazy val orphanCirceTestWithCirceJvm = orphanCirceTestWithCirce.jvm
+lazy val orphanCirceTestWithCirceJs  = orphanCirceTestWithCirce.js.settings(jsCommonSettings)
 
 lazy val props =
   new {
@@ -117,6 +174,8 @@ lazy val props =
 
     val ScalacCompatAnnotationVersion = "0.1.4"
 
+    val CirceVersion = "0.14.2"
+
   }
 
 lazy val libs = new {
@@ -125,6 +184,11 @@ lazy val libs = new {
     Def.setting("org.typelevel" %%% "cats-core" % props.CatsVersion)
 
   lazy val scalacCompatAnnotation = "org.typelevel" %% "scalac-compat-annotation" % props.ScalacCompatAnnotationVersion
+
+  lazy val circeCore    = Def.setting("io.circe" %%% "circe-core" % props.CirceVersion)
+  lazy val circeGeneric = Def.setting("io.circe" %%% "circe-generic" % props.CirceVersion)
+  lazy val circeLiteral = Def.setting("io.circe" %%% "circe-literal" % props.CirceVersion)
+  lazy val circeJawn    = Def.setting("io.circe" %%% "circe-jawn" % props.CirceVersion)
 
   lazy val tests = new {
 

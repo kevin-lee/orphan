@@ -1,0 +1,30 @@
+package orphan_test
+
+import hedgehog.*
+import hedgehog.runner.*
+
+/** @author Kevin Lee
+  * @since 2025-08-10
+  */
+object CirceDecoderWithCirceSpec extends Properties {
+
+  override def tests: List[Test] = List(
+    example("testCirceDecoder", testCirceDecoder)
+  )
+
+  def testCirceDecoder: Result = {
+
+    import scala.compiletime.testing.typeCheckErrors
+    val expectedMessage = ExpectedMessages.ExpectedMessageForCirceDecoder
+
+    val actual = typeCheckErrors(
+      """
+        val _ =  orphan_instance.OrphanCirceInstances.MyBox.circeDecoder
+      """
+    )
+
+    val actualErrorMessage = actual.map(_.message).mkString
+    (actualErrorMessage ==== expectedMessage)
+  }
+
+}

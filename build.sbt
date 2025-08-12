@@ -130,6 +130,7 @@ lazy val orphanCirceTestWithCirce    = module("circe-test-with-circe", crossProj
       libs.circeGeneric.value % Test,
       libs.circeJawn.value    % Test,
       libs.circeLiteral.value % Test,
+      libs.circeParser.value  % Test,
     ),
   )
   .dependsOn(orphanCirceTest % props.IncludeTest)
@@ -188,6 +189,7 @@ lazy val libs = new {
   lazy val circeCore    = Def.setting("io.circe" %%% "circe-core" % props.CirceVersion)
   lazy val circeGeneric = Def.setting("io.circe" %%% "circe-generic" % props.CirceVersion)
   lazy val circeLiteral = Def.setting("io.circe" %%% "circe-literal" % props.CirceVersion)
+  lazy val circeParser  = Def.setting("io.circe" %%% "circe-parser" % props.CirceVersion)
   lazy val circeJawn    = Def.setting("io.circe" %%% "circe-jawn" % props.CirceVersion)
 
   lazy val tests = new {

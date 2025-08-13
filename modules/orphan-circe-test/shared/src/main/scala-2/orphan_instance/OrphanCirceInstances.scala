@@ -11,6 +11,9 @@ object OrphanCirceInstances {
   final case class MyBox(id: Int, name: String, isActive: Boolean)
   object MyBox extends MyCirceInstances
 
+  final case class MyBoxForCodec(id: Int, name: String, isActive: Boolean)
+  object MyBoxForCodec extends MyCirceCodecInstances
+
   private[orphan_instance] trait MyCirceInstances extends MyCirceInstances1 {
     @nowarn213(
       """msg=evidence parameter .+ of type (.+\.)*CirceEncoder\[F\] in method circeEncoder is never used"""
@@ -30,6 +33,17 @@ object OrphanCirceInstances {
     implicit def circeDecoder[F[*]: CirceDecoder]: F[MyBox] = {
       val myBoxDecoder: io.circe.Decoder[MyBox] = io.circe.generic.semiauto.deriveDecoder[MyBox]
       myBoxDecoder.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
+    }
+  }
+
+  private[orphan_instance] trait MyCirceCodecInstances extends OrphanCirce {
+    @nowarn213(
+      """msg=evidence parameter .+ of type (.+\.)*CirceCodec\[F\] in method circeCodec is never used"""
+    )
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+    implicit def circeCodec[F[*]: CirceCodec]: F[MyBoxForCodec] = {
+      val myBoxCodec: io.circe.Codec[MyBoxForCodec] = io.circe.generic.semiauto.deriveCodec[MyBoxForCodec]
+      myBoxCodec.asInstanceOf[F[MyBoxForCodec]] // scalafix:ok DisableSyntax.asInstanceOf
     }
   }
 

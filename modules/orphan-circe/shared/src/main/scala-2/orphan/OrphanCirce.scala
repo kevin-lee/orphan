@@ -8,6 +8,7 @@ import scala.annotation.implicitNotFound
 trait OrphanCirce {
   final protected type CirceEncoder[F[*]] = OrphanCirce.CirceEncoder[F]
   final protected type CirceDecoder[F[*]] = OrphanCirce.CirceDecoder[F]
+  final protected type CirceCodec[F[*]]   = OrphanCirce.CirceCodec[F]
 }
 private[orphan] object OrphanCirce {
   @implicitNotFound(
@@ -33,6 +34,19 @@ private[orphan] object OrphanCirce {
   private[OrphanCirce] object CirceDecoder {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     @inline implicit final def getCirceDecoder: CirceDecoder[io.circe.Decoder] =
+      null // scalafix:ok DisableSyntax.null
+  }
+
+  @implicitNotFound(
+    msg = "Missing an instance of `CirceCodec` which means you're trying to use io.circe.Codec, " +
+      "but circe library is missing in your project config. " +
+      "If you want to have an instance of io.circe.Codec[A] provided, " +
+      """please add `"io.circe" %% "circe-core" % CIRCE_VERSION` to your libraryDependencies in build.sbt"""
+  )
+  sealed protected trait CirceCodec[F[*]]
+  private[OrphanCirce] object CirceCodec {
+    @SuppressWarnings(Array("org.wartremover.warts.Null"))
+    @inline implicit final def getCirceCodec: CirceCodec[io.circe.Codec] =
       null // scalafix:ok DisableSyntax.null
   }
 

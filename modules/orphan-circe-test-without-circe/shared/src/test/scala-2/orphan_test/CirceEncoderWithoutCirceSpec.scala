@@ -7,7 +7,7 @@ import hedgehog.runner.*
 /** @author Kevin Lee
   * @since 2025-08-10
   */
-object CirceEncoderWithCirceSpec extends Properties {
+object CirceEncoderWithoutCirceSpec extends Properties {
 
   override def tests: List[Test] = List(
     example("testCirceEncoder", testCirceEncoder)

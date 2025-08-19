@@ -1,6 +1,5 @@
 package orphan_instance
 
-import org.typelevel.scalaccompat.annotation.nowarn213
 import orphan.OrphanCatsKernel
 
 /** @author Kevin Lee
@@ -77,9 +76,6 @@ object OrphanCatsKernelInstances {
   }
 
   private[orphan_instance] trait MyCatsKernelInstances extends MyCatsKernelInstances1 {
-    @nowarn213(
-      """msg=evidence parameter .+ of type (.+\.)*CatsSemigroup\[F\] in method catsSemigroup is never used"""
-    )
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsSemigroup[F[*]: CatsSemigroup]: F[MyNum] = new cats.kernel.Semigroup[MyNum] {
       override def combine(x: MyNum, y: MyNum): MyNum = MyNum(x.n + y.n)
@@ -87,9 +83,6 @@ object OrphanCatsKernelInstances {
   }
 
   private[orphan_instance] trait MyCatsKernelInstances1 extends MyCatsKernelInstances2 {
-    @nowarn213(
-      """msg=evidence parameter .+ of type (.+\.)*CatsMonoid\[F\] in method catsMonoid is never used"""
-    )
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsMonoid[F[*]: CatsMonoid]: F[MyNum] = new cats.kernel.Monoid[MyNum] {
       override def empty: MyNum = MyNum(0)
@@ -99,9 +92,6 @@ object OrphanCatsKernelInstances {
   }
 
   private[orphan_instance] trait MyCatsKernelInstances2 extends MyCatsKernelInstances3 {
-    @nowarn213(
-      """msg=evidence parameter .+ of type (.+\.)*CatsEq\[F\] in method catsEq is never used"""
-    )
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsEq[F[*]: CatsEq]: F[MyNum] = new cats.kernel.Eq[MyNum] {
       override def eqv(x: MyNum, y: MyNum): Boolean = cats.kernel.Eq[Int].eqv(x.n, y.n)
@@ -109,9 +99,6 @@ object OrphanCatsKernelInstances {
   }
 
   private[orphan_instance] trait MyCatsKernelInstances3 extends MyCatsKernelInstances4 {
-    @nowarn213(
-      """msg=evidence parameter .+ of type (.+\.)*CatsHash\[F\] in method catsHash is never used"""
-    )
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsHash[F[*]: CatsHash]: F[MyNum] = new cats.kernel.Hash[MyNum] {
       override def hash(x: MyNum): Int = x.##
@@ -121,9 +108,6 @@ object OrphanCatsKernelInstances {
   }
 
   private[orphan_instance] trait MyCatsKernelInstances4 extends OrphanCatsKernel {
-    @nowarn213(
-      """msg=evidence parameter .+ of type (.+\.)*CatsOrder\[F\] in method catsOrder is never used"""
-    )
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsOrder[F[*]: CatsOrder]: F[MyNum] = new cats.kernel.Order[MyNum] {
       override def compare(x: MyNum, y: MyNum): Int = x.n.compare(y.n)

@@ -23,6 +23,14 @@ object OrphanCatsInstances {
     def apply[F[*]: MyInvariant]: MyInvariant[F] = implicitly[MyInvariant[F]]
   }
 
+  trait MyContravariant[F[*]] extends MyInvariant[F] {
+    def contramap[A, B](fa: F[A])(f: B => A): F[B]
+    override def imap[A, B](fa: F[A])(f: A => B)(fi: B => A): F[B] = contramap(fa)(fi)
+  }
+  object MyContravariant {
+    def apply[F[*]: MyContravariant]: MyContravariant[F] = implicitly[MyContravariant[F]]
+  }
+
   trait MyFunctor[F[*]] {
     def map[A, B](fa: F[A])(f: A => B): F[B]
   }
@@ -189,6 +197,28 @@ object OrphanCatsInstances {
         override def show(t: MyBox[A]): String = s"MyBox(a=${showA.show(t.a)})"
       }.asInstanceOf[F[MyBox[A]]] // scalafix:ok DisableSyntax.asInstanceOf
     }
+  }
+
+  trait MyEncoder[A] {
+    def encode(value: A): String
+  }
+  object MyEncoder extends OrphanCats {
+
+    def apply[A: MyEncoder]: MyEncoder[A] = implicitly[MyEncoder[A]]
+
+    implicit def myContravariantMyEncoder: MyContravariant[MyEncoder] = new MyContravariant[MyEncoder] {
+      override def contramap[A, B](fa: MyEncoder[A])(f: B => A): MyEncoder[B] = new MyEncoder[B] {
+        override def encode(value: B): String = fa.encode(f(value))
+      }
+    }
+
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+    implicit def catsContravariant[F[*[*]]: CatsContravariant]: F[MyEncoder] = new cats.Contravariant[MyEncoder] {
+      override def contramap[A, B](fa: MyEncoder[A])(f: B => A): MyEncoder[B] = new MyEncoder[B] {
+        override def encode(value: B): String = fa.encode(f(value))
+      }
+    }.asInstanceOf[F[MyEncoder]] // scalafix:ok DisableSyntax.asInstanceOf
+
   }
 
 }

@@ -8,7 +8,8 @@ import scala.annotation.implicitNotFound
 trait OrphanCats {
   final protected type CatsShow[F[*]] = OrphanCats.CatsShow[F]
 
-  final protected type CatsInvariant[F[*[*]]] = OrphanCats.CatsInvariant[F]
+  final protected type CatsInvariant[F[*[*]]]     = OrphanCats.CatsInvariant[F]
+  final protected type CatsContravariant[F[*[*]]] = OrphanCats.CatsContravariant[F]
 
   final protected type CatsFunctor[F[*[*]]]     = OrphanCats.CatsFunctor[F]
   final protected type CatsApplicative[F[*[*]]] = OrphanCats.CatsApplicative[F]
@@ -27,6 +28,19 @@ private[orphan] object OrphanCats {
   private[OrphanCats] object CatsShow {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsShow: CatsShow[cats.Show] =
+      null // scalafix:ok DisableSyntax.null
+  }
+
+  @implicitNotFound(
+    msg = "Missing an instance of `CatsContravariant` which means you're trying to use cats.Contravariant, " +
+      "but cats library is missing in your project config. " +
+      "If you want to have an instance of cats.Contravariant[F[*]] provided, " +
+      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+  )
+  sealed protected trait CatsContravariant[F[*[*]]]
+  private[OrphanCats] object CatsContravariant {
+    @SuppressWarnings(Array("org.wartremover.warts.Null"))
+    final inline given getCatsContravariant: CatsContravariant[cats.Contravariant] =
       null // scalafix:ok DisableSyntax.null
   }
 

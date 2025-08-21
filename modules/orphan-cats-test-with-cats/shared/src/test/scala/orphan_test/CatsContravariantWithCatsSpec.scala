@@ -1,0 +1,77 @@
+package orphan_test
+
+import cats.Contravariant
+import hedgehog.*
+import hedgehog.runner.*
+import orphan_instance.OrphanCatsInstances.{MyBox, MyContravariant, MyEncoder}
+
+/** @author Kevin Lee
+  * @since 2025-08-21
+  */
+object CatsContravariantWithCatsSpec extends Properties {
+
+  override def tests: List[Test] = List(
+    property("test MyContravariant.imap", testMyContravariantImap),
+    property("test MyContravariant.contramap", testMyContravariantContramap),
+    property("test CatsContravariant.imap", testCatsContravariantImap),
+    property("test CatsContravariant.contramap", testCatsContravariantContramap),
+  )
+
+  def testMyContravariantImap: Property = for {
+    n     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
+    myBox <- Gen.constant(MyBox(n)).log("myBox")
+  } yield {
+    val myEncoder = new MyEncoder[MyBox[Int]] {
+      override def encode(value: MyBox[Int]): String = s"Result(a=${(value.a + 999).toString})"
+    }
+
+    val input    = myBox.copy(a = myBox.a.toString)
+    val expected = s"Result(a=${n.toString})"
+    val actual   =
+      MyContravariant[MyEncoder].imap(myEncoder)(a => MyBox((a.a + 999).toString))(a => MyBox(a.a.toInt - 999))
+    actual.encode(input) ==== expected
+  }
+
+  def testMyContravariantContramap: Property = for {
+    n     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
+    myBox <- Gen.constant(MyBox(n)).log("myBox")
+  } yield {
+    val myEncoder = new MyEncoder[MyBox[Int]] {
+      override def encode(value: MyBox[Int]): String = s"Result(a=${(value.a + 999).toString})"
+    }
+
+    val input    = myBox.copy(a = myBox.a.toString)
+    val expected = s"Result(a=${n.toString})"
+    val actual   = MyContravariant[MyEncoder].contramap(myEncoder)((a: MyBox[String]) => MyBox(a.a.toInt - 999))
+    actual.encode(input) ==== expected
+  }
+
+  def testCatsContravariantImap: Property = for {
+    n     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
+    myBox <- Gen.constant(MyBox(n)).log("myBox")
+  } yield {
+    val myEncoder = new MyEncoder[MyBox[Int]] {
+      override def encode(value: MyBox[Int]): String = s"Result(a=${(value.a + 999).toString})"
+    }
+
+    val input    = myBox.copy(a = myBox.a.toString)
+    val expected = s"Result(a=${n.toString})"
+    val actual = Contravariant[MyEncoder].imap(myEncoder)(a => MyBox((a.a + 999).toString))(a => MyBox(a.a.toInt - 999))
+    actual.encode(input) ==== expected
+  }
+
+  def testCatsContravariantContramap: Property = for {
+    n     <- Gen.int(Range.linear(0, Int.MaxValue)).log("n")
+    myBox <- Gen.constant(MyBox(n)).log("myBox")
+  } yield {
+    val myEncoder = new MyEncoder[MyBox[Int]] {
+      override def encode(value: MyBox[Int]): String = s"Result(a=${(value.a + 999).toString})"
+    }
+
+    val input    = myBox.copy(a = myBox.a.toString)
+    val expected = s"Result(a=${n.toString})"
+    val actual   = Contravariant[MyEncoder].contramap(myEncoder)((a: MyBox[String]) => MyBox(a.a.toInt - 999))
+    actual.encode(input) ==== expected
+  }
+
+}

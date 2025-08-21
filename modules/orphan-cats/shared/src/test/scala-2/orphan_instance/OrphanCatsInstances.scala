@@ -16,6 +16,13 @@ object OrphanCatsInstances {
     def apply[A: MyShow]: MyShow[A] = implicitly[MyShow[A]]
   }
 
+  trait MyInvariant[F[*]] {
+    def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
+  }
+  object MyInvariant {
+    def apply[F[*]: MyInvariant]: MyInvariant[F] = implicitly[MyInvariant[F]]
+  }
+
   trait MyFunctor[F[*]] {
     def map[A, B](fa: F[A])(f: A => B): F[B]
   }
@@ -85,6 +92,10 @@ object OrphanCatsInstances {
       override def show(t: MyBox[A]): String = s"MyBox(a=${MyShow[A].show(t.a)})"
     }
 
+    implicit def myBoxMyInvariant: MyInvariant[MyBox] = new MyInvariant[MyBox] {
+      override def imap[A, B](fa: MyBox[A])(f: A => B)(g: B => A): MyBox[B] = fa.copy(f(fa.a))
+    }
+
     implicit def myBoxMyFunctor: MyFunctor[MyBox] = new MyFunctor[MyBox] {
       override def map[A, B](fa: MyBox[A])(f: A => B): MyBox[B] = fa.copy(f(fa.a))
     }
@@ -121,12 +132,19 @@ object OrphanCatsInstances {
 
   private[orphan_instance] trait MyCatsInstances extends MyCatsInstances1 {
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+    implicit def catsInvariant[F[*[*]]: CatsInvariant]: F[MyBox] = new cats.Invariant[MyBox] {
+      override def imap[A, B](fa: MyBox[A])(f: A => B)(g: B => A): MyBox[B] = fa.copy(f(fa.a))
+    }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
+  }
+
+  private[orphan_instance] trait MyCatsInstances1 extends MyCatsInstances2 {
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsFunctor[F[*[*]]: CatsFunctor]: F[MyBox] = new cats.Functor[MyBox] {
       override def map[A, B](fa: MyBox[A])(f: A => B): MyBox[B] = fa.copy(f(fa.a))
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsInstances1 extends MyCatsInstances2 {
+  private[orphan_instance] trait MyCatsInstances2 extends MyCatsInstances3 {
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsApplicative[F[*[*]]: CatsApplicative]: F[MyBox] = new cats.Applicative[MyBox] {
       override def pure[A](a: A): MyBox[A] = MyBox(a)
@@ -135,7 +153,7 @@ object OrphanCatsInstances {
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsInstances2 extends MyCatsInstances3 {
+  private[orphan_instance] trait MyCatsInstances3 extends MyCatsInstances4 {
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsMonad[F[*[*]]: CatsMonad]: F[MyBox] = new cats.Monad[MyBox] {
       override def pure[A](x: A): MyBox[A] = MyBox(x)
@@ -150,7 +168,7 @@ object OrphanCatsInstances {
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsInstances3 extends MyCatsInstances4 {
+  private[orphan_instance] trait MyCatsInstances4 extends MyCatsInstances5 {
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsTraverse[F[*[*]]: CatsTraverse]: F[MyBox] = new cats.Traverse[MyBox] {
       override def traverse[G[_]: cats.Applicative, A, B](fa: MyBox[A])(f: A => G[B]): G[MyBox[B]] =
@@ -163,7 +181,7 @@ object OrphanCatsInstances {
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsInstances4 extends OrphanCats {
+  private[orphan_instance] trait MyCatsInstances5 extends OrphanCats {
     @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     implicit def catsShow[F[*]: CatsShow, A, G[*]: CatsShow](implicit g: G[A]): F[MyBox[A]] = {
       implicit val showA: cats.Show[A] = g.asInstanceOf[cats.Show[A]] // scalafix:ok DisableSyntax.asInstanceOf

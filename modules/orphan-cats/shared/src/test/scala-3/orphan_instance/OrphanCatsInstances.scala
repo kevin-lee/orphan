@@ -17,6 +17,13 @@ object OrphanCatsInstances {
     def apply[A: MyShow]: MyShow[A] = summon[MyShow[A]]
   }
 
+  trait MyInvariant[F[*]] {
+    def imap[A, B](fa: F[A])(f: A => B)(g: B => A): F[B]
+  }
+  object MyInvariant {
+    def apply[F[*]: MyInvariant]: MyInvariant[F] = summon[MyInvariant[F]]
+  }
+
   trait MyFunctor[F[*]] {
     def map[A, B](fa: F[A])(f: A => B): F[B]
   }
@@ -91,10 +98,14 @@ object OrphanCatsInstances {
   /////
 
   final case class MyBox[A](a: A)
-  object MyBox extends CatsInstances {
+  object MyBox extends MyCatsInstances {
 
     given myBoxMyShow[A: MyShow]: MyShow[MyBox[A]] with {
       override def show(t: MyBox[A]): String = s"MyBox(a=${MyShow[A].show(t.a)})"
+    }
+
+    given myBoxMyInvariant: MyInvariant[MyBox] with {
+      override def imap[A, B](fa: MyBox[A])(f: A => B)(g: B => A): MyBox[B] = fa.copy(f(fa.a))
     }
 
     given myBoxMyFunctor: MyFunctor[MyBox] with {
@@ -131,7 +142,14 @@ object OrphanCatsInstances {
 
   }
 
-  private[orphan_instance] trait CatsInstances extends CatsInstances1 {
+  private[orphan_instance] trait MyCatsInstances extends MyCatsInstances1 {
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+    given catsInvariant[F[*[*]]: CatsInvariant]: F[MyBox] = new cats.Invariant[MyBox] {
+      override def imap[A, B](fa: MyBox[A])(f: A => B)(g: B => A): MyBox[B] = fa.copy(f(fa.a))
+    }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
+  }
+
+  private[orphan_instance] trait MyCatsInstances1 extends MyCatsInstances2 {
     @nowarn(
       """msg=evidence parameter .+ of type (.+\.)*CatsFunctor\[F\] in method catsFunctor is never used"""
     )
@@ -141,7 +159,7 @@ object OrphanCatsInstances {
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait CatsInstances1 extends MyCatsInstances2 {
+  private[orphan_instance] trait MyCatsInstances2 extends MyCatsInstances3 {
     @nowarn(
       """msg=evidence parameter .+ of type (.+\.)*CatsFunctor\[F\] in method catsFunctor is never used"""
     )
@@ -153,7 +171,7 @@ object OrphanCatsInstances {
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsInstances2 extends MyCatsInstances3 {
+  private[orphan_instance] trait MyCatsInstances3 extends MyCatsInstances4 {
     @nowarn(
       """msg=evidence parameter .+ of type (.+\.)*CatsMonad\[F\] in method catsMonad is never used"""
     )
@@ -171,7 +189,7 @@ object OrphanCatsInstances {
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsInstances3 extends MyCatsInstances4 {
+  private[orphan_instance] trait MyCatsInstances4 extends MyCatsInstances5 {
     @nowarn(
       """msg=evidence parameter .+ of type (.+\.)*CatsTraverse\[F\] in method catsTraverse is never used"""
     )
@@ -187,7 +205,7 @@ object OrphanCatsInstances {
     }.asInstanceOf[F[MyBox]] // scalafix:ok DisableSyntax.asInstanceOf
   }
 
-  private[orphan_instance] trait MyCatsInstances4 extends OrphanCats {
+  private[orphan_instance] trait MyCatsInstances5 extends OrphanCats {
     @nowarn(
       """msg=evidence parameter .+ of type (.+\.)*CatsShow\[F\] in method catsShow is never used"""
     )

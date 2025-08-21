@@ -8,6 +8,9 @@ object ExpectedMessages {
   val ExpectedMessageForCatsShow: String =
     """Missing an instance of `CatsShow` which means you're trying to use cats.Show, but cats library is missing in your project config. If you want to have an instance of cats.Show[F[*]] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
 
+  val ExpectedMessageForCatsInvariant: String =
+    """Missing an instance of `CatsInvariant` which means you're trying to use cats.Invariant, but cats library is missing in your project config. If you want to have an instance of cats.Invariant[F[*]] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+
   val ExpectedMessageForCatsFunctor: String =
     """Missing an instance of `CatsFunctor` which means you're trying to use cats.Functor, but cats library is missing in your project config. If you want to have an instance of cats.Functor[F[*]] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
 

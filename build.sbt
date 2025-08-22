@@ -82,6 +82,7 @@ lazy val orphanCatsTestWithoutCats       =
     .settings(noPublish)
     .settings(
       libraryDependencies ++= List(libs.tests.extrasTestingTools.value),
+      libraryDependencies ~= (libs => libs.filterNot(_.name.startsWith("cats"))),
     )
     .dependsOn(orphanCats % props.IncludeTest)
 lazy val orphanCatsTestWithoutCatsJvm    = orphanCatsTestWithoutCats.jvm

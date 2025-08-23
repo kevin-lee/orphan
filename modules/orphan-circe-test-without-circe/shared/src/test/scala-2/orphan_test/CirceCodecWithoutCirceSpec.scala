@@ -14,7 +14,7 @@ object CirceCodecWithoutCirceSpec extends Properties {
   )
 
   def testCirceCodec: Result = {
-    val expected = s"""error: ${ExpectedMessages.ExpectedMessageForCirceCodec}
+    val expected = s"""error: ${OrphanCirceMessages.MissingCirceCodec}
                       |orphan_instance.OrphanCirceInstances.MyBoxForCodec.circeCodec
                       |                                                   ^""".stripMargin
 

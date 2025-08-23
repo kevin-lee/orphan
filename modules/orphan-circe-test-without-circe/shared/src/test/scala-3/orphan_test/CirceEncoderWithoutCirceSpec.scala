@@ -15,7 +15,7 @@ object CirceEncoderWithoutCirceSpec extends Properties {
   def testCirceEncoder: Result = {
 
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = ExpectedMessages.ExpectedMessageForCirceEncoder
+    val expectedMessage = OrphanCirceMessages.MissingCirceEncoder
 
     val actual = typeCheckErrors(
       """

@@ -47,7 +47,7 @@ object CatsApplicativeWithoutCatsSpec extends Properties {
   }
 
   def testCatsApplicative: Result = {
-    val expected = s"""error: ${orphan.ExpectedMessages.ExpectedMessageForCatsApplicative}
+    val expected = s"""error: ${orphan.OrphanCatsMessages.MisingCatsApplicative}
                       |orphan_instance.OrphanCatsInstances.MyBox.catsApplicative
                       |                                          ^""".stripMargin
 

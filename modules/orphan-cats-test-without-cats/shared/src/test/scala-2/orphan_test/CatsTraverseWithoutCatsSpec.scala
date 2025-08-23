@@ -58,7 +58,7 @@ object CatsTraverseWithoutCatsSpec extends Properties {
   }
 
   def testCatsTraverse: Result = {
-    val expected = s"""error: ${orphan.ExpectedMessages.ExpectedMessageForCatsTraverse}
+    val expected = s"""error: ${orphan.OrphanCatsMessages.MisingCatsTraverse}
                       |orphan_instance.OrphanCatsInstances.MyBox.catsTraverse
                       |                                          ^""".stripMargin
 

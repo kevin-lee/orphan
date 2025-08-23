@@ -58,7 +58,7 @@ object CatsTraverseWithoutCatsSpec extends Properties {
 
   def testCatsTraverse: Result = {
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan.ExpectedMessages.ExpectedMessageForCatsTraverse
+    val expectedMessage = orphan.OrphanCatsMessages.MisingCatsTraverse
 
     val actual = typeCheckErrors(
       """

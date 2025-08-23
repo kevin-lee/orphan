@@ -15,7 +15,7 @@ trait OrphanCatsKernel {
 private[orphan] object OrphanCatsKernel {
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsSemigroup
+    msg = OrphanCatsMessages.MisingCatsSemigroup
   )
   sealed protected trait CatsSemigroup[F[*]]
   private[OrphanCatsKernel] object CatsSemigroup {
@@ -25,7 +25,7 @@ private[orphan] object OrphanCatsKernel {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsMonoid
+    msg = OrphanCatsMessages.MisingCatsMonoid
   )
   sealed protected trait CatsMonoid[F[*]]
   private[OrphanCatsKernel] object CatsMonoid {
@@ -35,7 +35,7 @@ private[orphan] object OrphanCatsKernel {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsEq
+    msg = OrphanCatsMessages.MisingCatsEq
   )
   sealed protected trait CatsEq[F[*]]
   private[OrphanCatsKernel] object CatsEq {
@@ -45,7 +45,7 @@ private[orphan] object OrphanCatsKernel {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsHash
+    msg = OrphanCatsMessages.MisingCatsHash
   )
   sealed protected trait CatsHash[F[*]]
   private[OrphanCatsKernel] object CatsHash {
@@ -55,7 +55,7 @@ private[orphan] object OrphanCatsKernel {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsOrder
+    msg = OrphanCatsMessages.MisingCatsOrder
   )
   sealed protected trait CatsOrder[F[*]]
   private[OrphanCatsKernel] object CatsOrder {

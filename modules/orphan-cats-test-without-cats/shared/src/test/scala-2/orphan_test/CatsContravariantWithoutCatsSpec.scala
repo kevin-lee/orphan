@@ -63,7 +63,7 @@ object CatsContravariantWithoutCatsSpec extends Properties {
 
   def testCatsContravariant: Result = {
 
-    val expected = s"""error: ${orphan.ExpectedMessages.ExpectedMessageForCatsContravariant}
+    val expected = s"""error: ${orphan.OrphanCatsMessages.MisingCatsContravariant}
                       |orphan_instance.OrphanCatsInstances.MyEncoder.catsContravariant
                       |                                              ^""".stripMargin
 

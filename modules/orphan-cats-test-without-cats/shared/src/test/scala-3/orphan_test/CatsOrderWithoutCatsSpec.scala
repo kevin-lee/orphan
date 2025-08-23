@@ -27,7 +27,7 @@ object CatsOrderWithoutCatsSpec extends Properties {
 
   def testCatsOrder: Result = {
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan.ExpectedMessages.ExpectedMessageForCatsOrder
+    val expectedMessage = orphan.OrphanCatsMessages.MisingCatsOrder
 
     val actual = typeCheckErrors(
       """

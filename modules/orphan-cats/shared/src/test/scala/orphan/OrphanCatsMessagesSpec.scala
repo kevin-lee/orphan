@@ -61,7 +61,7 @@ object OrphanCatsMessagesSpec extends Properties {
   )
 
   def testExpectedMessageForCatsShow: Result = {
-    val message = OrphanCatsMessages.MisingCatsShow
+    val message = OrphanCatsMessages.MissingCatsShow
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsShow")(_.contains(_)),
@@ -76,7 +76,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsInvariant: Result = {
-    val message = OrphanCatsMessages.MisingCatsInvariant
+    val message = OrphanCatsMessages.MissingCatsInvariant
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsInvariant")(_.contains(_)),
@@ -91,7 +91,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsContravariant: Result = {
-    val message = OrphanCatsMessages.MisingCatsContravariant
+    val message = OrphanCatsMessages.MissingCatsContravariant
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsContravariant")(_.contains(_)),
@@ -106,7 +106,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsFunctor: Result = {
-    val message = OrphanCatsMessages.MisingCatsFunctor
+    val message = OrphanCatsMessages.MissingCatsFunctor
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsFunctor")(_.contains(_)),
@@ -121,7 +121,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsApplicative: Result = {
-    val message = OrphanCatsMessages.MisingCatsApplicative
+    val message = OrphanCatsMessages.MissingCatsApplicative
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsApplicative")(_.contains(_)),
@@ -136,7 +136,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsMonad: Result = {
-    val message = OrphanCatsMessages.MisingCatsMonad
+    val message = OrphanCatsMessages.MissingCatsMonad
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsMonad")(_.contains(_)),
@@ -151,7 +151,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsTraverse: Result = {
-    val message = OrphanCatsMessages.MisingCatsTraverse
+    val message = OrphanCatsMessages.MissingCatsTraverse
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsTraverse")(_.contains(_)),
@@ -166,7 +166,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsSemigroup: Result = {
-    val message = OrphanCatsMessages.MisingCatsSemigroup
+    val message = OrphanCatsMessages.MissingCatsSemigroup
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsSemigroup")(_.contains(_)),
@@ -181,7 +181,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsMonoid: Result = {
-    val message = OrphanCatsMessages.MisingCatsMonoid
+    val message = OrphanCatsMessages.MissingCatsMonoid
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsMonoid")(_.contains(_)),
@@ -196,7 +196,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsEq: Result = {
-    val message = OrphanCatsMessages.MisingCatsEq
+    val message = OrphanCatsMessages.MissingCatsEq
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsEq")(_.contains(_)),
@@ -211,7 +211,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsHash: Result = {
-    val message = OrphanCatsMessages.MisingCatsHash
+    val message = OrphanCatsMessages.MissingCatsHash
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsHash")(_.contains(_)),
@@ -226,7 +226,7 @@ object OrphanCatsMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsOrder: Result = {
-    val message = OrphanCatsMessages.MisingCatsOrder
+    val message = OrphanCatsMessages.MissingCatsOrder
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsOrder")(_.contains(_)),

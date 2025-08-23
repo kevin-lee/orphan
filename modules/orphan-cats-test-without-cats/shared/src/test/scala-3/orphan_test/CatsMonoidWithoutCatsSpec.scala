@@ -36,7 +36,7 @@ object CatsMonoidWithoutCatsSpec extends Properties {
   def testCatsMonoid: Result = {
 
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan.OrphanCatsMessages.MisingCatsMonoid
+    val expectedMessage = orphan.OrphanCatsMessages.MissingCatsMonoid
 
     val actual = typeCheckErrors(
       """

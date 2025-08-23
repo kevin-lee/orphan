@@ -28,7 +28,7 @@ object CatsSemigroupWithoutCatsSpec extends Properties {
   def testCatsSemigroup: Result = {
 
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan.OrphanCatsMessages.MisingCatsSemigroup
+    val expectedMessage = orphan.OrphanCatsMessages.MissingCatsSemigroup
 
     val actual = typeCheckErrors(
       """

@@ -27,7 +27,7 @@ object CatsSemigroupWithoutCatsSpec extends Properties {
   }
 
   def testCatsSemigroup: Result = {
-    val expected = s"""error: ${orphan.OrphanCatsMessages.MisingCatsSemigroup}
+    val expected = s"""error: ${orphan.OrphanCatsMessages.MissingCatsSemigroup}
                       |orphan_instance.OrphanCatsKernelInstances.MyNum.catsSemigroup
                       |                                                ^""".stripMargin
 

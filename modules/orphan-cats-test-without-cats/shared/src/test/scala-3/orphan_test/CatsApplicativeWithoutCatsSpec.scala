@@ -47,7 +47,7 @@ object CatsApplicativeWithoutCatsSpec extends Properties {
 
   def testCatsApplicative: Result = {
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan.OrphanCatsMessages.MisingCatsApplicative
+    val expectedMessage = orphan.OrphanCatsMessages.MissingCatsApplicative
 
     val actual = typeCheckErrors(
       """

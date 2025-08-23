@@ -49,7 +49,7 @@ object CatsHashWithoutCatsSpec extends Properties {
 
   def testCatsHash: Result = {
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan.OrphanCatsMessages.MisingCatsHash
+    val expectedMessage = orphan.OrphanCatsMessages.MissingCatsHash
 
     val actual = typeCheckErrors(
       """

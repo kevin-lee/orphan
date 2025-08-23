@@ -25,7 +25,7 @@ object CatsFunctorWithoutCatsSpec extends Properties {
 
   def testCatsFunctor: Result = {
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan.OrphanCatsMessages.MisingCatsFunctor
+    val expectedMessage = orphan.OrphanCatsMessages.MissingCatsFunctor
 
     val actual = typeCheckErrors(
       """

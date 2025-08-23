@@ -36,7 +36,7 @@ object CatsMonadWithoutCatsSpec extends Properties {
 
   def testCatsMonad: Result = {
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan.OrphanCatsMessages.MisingCatsMonad
+    val expectedMessage = orphan.OrphanCatsMessages.MissingCatsMonad
 
     val actual = typeCheckErrors(
       """

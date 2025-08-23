@@ -27,7 +27,7 @@ object CatsShowWithoutCatsSpec extends Properties {
   }
 
   def testCatsShow: Result = {
-    val expected = s"""error: ${orphan.OrphanCatsMessages.MisingCatsShow}
+    val expected = s"""error: ${orphan.OrphanCatsMessages.MissingCatsShow}
                       |orphan_instance.OrphanCatsInstances.MyBox.catsShow
                       |                                          ^""".stripMargin
 

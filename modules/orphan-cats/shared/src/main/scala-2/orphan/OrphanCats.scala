@@ -19,10 +19,7 @@ trait OrphanCats {
 private[orphan] object OrphanCats {
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsShow` which means you're trying to use cats.Show, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.Show[A] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsShow
   )
   sealed protected trait CatsShow[F[*]]
   private[OrphanCats] object CatsShow {
@@ -32,10 +29,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsInvariant` which means you're trying to use cats.Invariant, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.Invariant[F[*]] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsInvariant
   )
   sealed protected trait CatsInvariant[F[*[*]]]
   private[OrphanCats] object CatsInvariant {
@@ -45,10 +39,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsContravariant` which means you're trying to use cats.Contravariant, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.Contravariant[F[*]] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsContravariant
   )
   sealed protected trait CatsContravariant[F[*[*]]]
   private[OrphanCats] object CatsContravariant {
@@ -58,10 +49,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsFunctor` which means you're trying to use cats.Functor, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.Functor[F[*]] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsFunctor
   )
   sealed protected trait CatsFunctor[F[*[*]]]
   private[OrphanCats] object CatsFunctor {
@@ -71,10 +59,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsApplicative` which means you're trying to use cats.Applicative, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.Applicative[F[*]] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsApplicative
   )
   sealed protected trait CatsApplicative[F[*[*]]]
   private[OrphanCats] object CatsApplicative {
@@ -84,10 +69,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsMonad` which means you're trying to use cats.Monad, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.Monad[F[*]] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsMonad
   )
   sealed protected trait CatsMonad[F[*[*]]]
   private[OrphanCats] object CatsMonad {
@@ -97,10 +79,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsTraverse` which means you're trying to use cats.Traverse, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.Traverse[F[*]] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsTraverse
   )
   sealed protected trait CatsTraverse[F[*[*]]]
   private[OrphanCats] object CatsTraverse {

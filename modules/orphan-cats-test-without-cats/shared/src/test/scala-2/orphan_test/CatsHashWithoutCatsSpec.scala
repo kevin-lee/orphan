@@ -49,7 +49,7 @@ object CatsHashWithoutCatsSpec extends Properties {
   }
 
   def testCatsHash: Result = {
-    val expected = s"""error: ${ExpectedMessages.ExpectedMessageForCatsHash}
+    val expected = s"""error: ${orphan.ExpectedMessages.ExpectedMessageForCatsHash}
                       |orphan_instance.OrphanCatsKernelInstances.MyNum.catsHash
                       |                                                ^""".stripMargin
 

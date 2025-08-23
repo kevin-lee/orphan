@@ -25,7 +25,7 @@ object CatsInvariantWithoutCatsSpec extends Properties {
 
   def testCatsInvariant: Result = {
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = ExpectedMessages.ExpectedMessageForCatsInvariant
+    val expectedMessage = orphan.ExpectedMessages.ExpectedMessageForCatsInvariant
 
     val actual = typeCheckErrors(
       """

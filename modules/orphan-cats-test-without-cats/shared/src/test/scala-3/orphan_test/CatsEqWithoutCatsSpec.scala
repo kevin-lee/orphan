@@ -39,7 +39,7 @@ object CatsEqWithoutCatsSpec extends Properties {
 
   def testCatsEq: Result = {
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = orphan_test.ExpectedMessages.ExpectedMessageForCatsEq
+    val expectedMessage = orphan.ExpectedMessages.ExpectedMessageForCatsEq
 
     val actual = typeCheckErrors(
       """

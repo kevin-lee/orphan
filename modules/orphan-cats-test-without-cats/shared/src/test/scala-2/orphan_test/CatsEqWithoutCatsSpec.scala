@@ -39,7 +39,7 @@ object CatsEqWithoutCatsSpec extends Properties {
   }
 
   def testCatsEq: Result = {
-    val expected = s"""error: ${ExpectedMessages.ExpectedMessageForCatsEq}
+    val expected = s"""error: ${orphan.ExpectedMessages.ExpectedMessageForCatsEq}
                       |orphan_instance.OrphanCatsKernelInstances.MyNum.catsEq
                       |                                                ^""".stripMargin
 

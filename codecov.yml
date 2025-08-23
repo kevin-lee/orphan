@@ -2,6 +2,7 @@ ignore:
   - "docs"
   - "generated-docs"
   - "website"
+  - "**/ExpectedMessages.scala"
 
 comment:
   layout: "reach, diff, flags, files"

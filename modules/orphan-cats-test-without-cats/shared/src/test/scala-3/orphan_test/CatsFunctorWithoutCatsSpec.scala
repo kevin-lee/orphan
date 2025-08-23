@@ -25,8 +25,7 @@ object CatsFunctorWithoutCatsSpec extends Properties {
 
   def testCatsFunctor: Result = {
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage =
-      """Missing an instance of `CatsFunctor` which means you're trying to use cats.Functor, but cats library is missing in your project config. If you want to have an instance of cats.Functor[F[*]] provided, please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    val expectedMessage = orphan.ExpectedMessages.ExpectedMessageForCatsFunctor
 
     val actual = typeCheckErrors(
       """

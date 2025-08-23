@@ -27,7 +27,7 @@ object CatsOrderWithoutCatsSpec extends Properties {
   }
 
   def testCatsOrder: Result = {
-    val expected = s"""error: ${ExpectedMessages.ExpectedMessageForCatsOrder}
+    val expected = s"""error: ${orphan.ExpectedMessages.ExpectedMessageForCatsOrder}
                       |orphan_instance.OrphanCatsKernelInstances.MyNum.catsOrder
                       |                                                ^""".stripMargin
 

@@ -15,10 +15,7 @@ trait OrphanCatsKernel {
 private[orphan] object OrphanCatsKernel {
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsSemigroup` which means you're trying to use cats.kernel.Semigroup, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.kernel.Semigroup[A] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsSemigroup
   )
   sealed protected trait CatsSemigroup[F[*]]
   private[OrphanCatsKernel] object CatsSemigroup {
@@ -28,10 +25,7 @@ private[orphan] object OrphanCatsKernel {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsMonoid` which means you're trying to use cats.kernel.Monoid, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.kernel.Monoid[A] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsMonoid
   )
   sealed protected trait CatsMonoid[F[*]]
   private[OrphanCatsKernel] object CatsMonoid {
@@ -41,10 +35,7 @@ private[orphan] object OrphanCatsKernel {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsEq` which means you're trying to use cats.kernel.Eq, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.kernel.Eq[A] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsEq
   )
   sealed protected trait CatsEq[F[*]]
   private[OrphanCatsKernel] object CatsEq {
@@ -54,10 +45,7 @@ private[orphan] object OrphanCatsKernel {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsHash` which means you're trying to use cats.kernel.Hash, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.kernel.Hash[A] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsHash
   )
   sealed protected trait CatsHash[F[*]]
   private[OrphanCatsKernel] object CatsHash {
@@ -67,10 +55,7 @@ private[orphan] object OrphanCatsKernel {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CatsOrder` which means you're trying to use cats.kernel.Order, " +
-      "but cats library is missing in your project config. " +
-      "If you want to have an instance of cats.kernel.Order[A] provided, " +
-      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+    msg = ExpectedMessages.ExpectedMessageForCatsOrder
   )
   sealed protected trait CatsOrder[F[*]]
   private[OrphanCatsKernel] object CatsOrder {

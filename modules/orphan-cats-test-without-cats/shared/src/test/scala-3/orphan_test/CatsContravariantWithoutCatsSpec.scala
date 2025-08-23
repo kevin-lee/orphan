@@ -63,7 +63,7 @@ object CatsContravariantWithoutCatsSpec extends Properties {
   def testCatsContravariant: Result = {
 
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = ExpectedMessages.ExpectedMessageForCatsContravariant
+    val expectedMessage = orphan.ExpectedMessages.ExpectedMessageForCatsContravariant
 
     val actual = typeCheckErrors(
       """

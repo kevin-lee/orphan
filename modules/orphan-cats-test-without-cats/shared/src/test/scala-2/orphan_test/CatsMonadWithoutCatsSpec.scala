@@ -36,7 +36,7 @@ object CatsMonadWithoutCatsSpec extends Properties {
   }
 
   def testCatsMonad: Result = {
-    val expected = s"""error: ${ExpectedMessages.ExpectedMessageForCatsMonad}
+    val expected = s"""error: ${orphan.ExpectedMessages.ExpectedMessageForCatsMonad}
                       |orphan_instance.OrphanCatsInstances.MyBox.catsMonad
                       |                                          ^""".stripMargin
 

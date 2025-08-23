@@ -35,7 +35,7 @@ object CatsMonoidWithoutCatsSpec extends Properties {
   }
 
   def testCatsMonoid: Result = {
-    val expected = s"""error: ${ExpectedMessages.ExpectedMessageForCatsMonoid}
+    val expected = s"""error: ${orphan.ExpectedMessages.ExpectedMessageForCatsMonoid}
                       |orphan_instance.OrphanCatsKernelInstances.MyNum.catsMonoid
                       |                                                ^""".stripMargin
 

@@ -14,7 +14,7 @@ object CirceDecoderWithoutCirceSpec extends Properties {
   )
 
   def testCirceDecoder: Result = {
-    val expected = s"""error: ${ExpectedMessages.ExpectedMessageForCirceDecoder}
+    val expected = s"""error: ${OrphanCirceMessages.MissingCirceDecoder}
                       |orphan_instance.OrphanCirceInstances.MyBox.circeDecoder
                       |                                           ^""".stripMargin
 

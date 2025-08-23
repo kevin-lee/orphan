@@ -15,7 +15,7 @@ object CirceCodecWithoutCirceSpec extends Properties {
   def testCirceCodec: Result = {
 
     import scala.compiletime.testing.typeCheckErrors
-    val expectedMessage = ExpectedMessages.ExpectedMessageForCirceCodec
+    val expectedMessage = OrphanCirceMessages.MissingCirceCodec
 
     val actual = typeCheckErrors(
       """

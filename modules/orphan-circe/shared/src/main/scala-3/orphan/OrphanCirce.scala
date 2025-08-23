@@ -12,10 +12,7 @@ trait OrphanCirce {
 }
 private[orphan] object OrphanCirce {
   @implicitNotFound(
-    msg = "Missing an instance of `CirceEncoder` which means you're trying to use io.circe.Encoder, " +
-      "but circe library is missing in your project config. " +
-      "If you want to have an instance of io.circe.Encoder[A] provided, " +
-      """please add `"io.circe" %% "circe-core" % CIRCE_VERSION` to your libraryDependencies in build.sbt"""
+    msg = OrphanCirceMessages.MissingCirceEncoder
   )
   sealed protected trait CirceEncoder[F[*]]
   private[OrphanCirce] object CirceEncoder {
@@ -25,10 +22,7 @@ private[orphan] object OrphanCirce {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CirceDecoder` which means you're trying to use io.circe.Decoder, " +
-      "but circe library is missing in your project config. " +
-      "If you want to have an instance of io.circe.Decoder[A] provided, " +
-      """please add `"io.circe" %% "circe-core" % CIRCE_VERSION` to your libraryDependencies in build.sbt"""
+    msg = OrphanCirceMessages.MissingCirceDecoder
   )
   sealed protected trait CirceDecoder[F[*]]
   private[OrphanCirce] object CirceDecoder {
@@ -45,10 +39,7 @@ private[orphan] object OrphanCirce {
   }
 
   @implicitNotFound(
-    msg = "Missing an instance of `CirceCodec` which means you're trying to use io.circe.Codec, " +
-      "but circe library is missing in your project config. " +
-      "If you want to have an instance of io.circe.Codec[A] provided, " +
-      """please add `"io.circe" %% "circe-core" % CIRCE_VERSION` to your libraryDependencies in build.sbt"""
+    msg = OrphanCirceMessages.MissingCirceCodec
   )
   sealed protected trait CirceCodec[F[*]]
   private[OrphanCirce] object CirceCodec {

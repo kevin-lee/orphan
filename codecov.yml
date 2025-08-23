@@ -3,6 +3,7 @@ ignore:
   - "generated-docs"
   - "website"
   - "**/OrphanCatsMessages.scala"
+  - "**/OrphanCirceMessages.scala"
 
 comment:
   layout: "reach, diff, flags, files"

@@ -3,6 +3,7 @@ package orphan_test
 import extras.testing.CompileTimeError
 import hedgehog.*
 import hedgehog.runner.*
+import orphan.OrphanCirceMessages
 
 /** @author Kevin Lee
   * @since 2025-08-10

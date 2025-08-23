@@ -19,7 +19,7 @@ trait OrphanCats {
 private[orphan] object OrphanCats {
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsShow
+    msg = OrphanCatsMessages.MisingCatsShow
   )
   sealed protected trait CatsShow[F[*]]
   private[OrphanCats] object CatsShow {
@@ -29,7 +29,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsInvariant
+    msg = OrphanCatsMessages.MisingCatsInvariant
   )
   sealed protected trait CatsInvariant[F[*[*]]]
   private[OrphanCats] object CatsInvariant {
@@ -39,7 +39,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsContravariant
+    msg = OrphanCatsMessages.MisingCatsContravariant
   )
   sealed protected trait CatsContravariant[F[*[*]]]
   private[OrphanCats] object CatsContravariant {
@@ -49,7 +49,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsFunctor
+    msg = OrphanCatsMessages.MisingCatsFunctor
   )
   sealed protected trait CatsFunctor[F[*[*]]]
   private[OrphanCats] object CatsFunctor {
@@ -59,7 +59,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsApplicative
+    msg = OrphanCatsMessages.MisingCatsApplicative
   )
   sealed protected trait CatsApplicative[F[*[*]]]
   private[OrphanCats] object CatsApplicative {
@@ -69,7 +69,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsMonad
+    msg = OrphanCatsMessages.MisingCatsMonad
   )
   sealed protected trait CatsMonad[F[*[*]]]
   private[OrphanCats] object CatsMonad {
@@ -79,7 +79,7 @@ private[orphan] object OrphanCats {
   }
 
   @implicitNotFound(
-    msg = ExpectedMessages.ExpectedMessageForCatsTraverse
+    msg = OrphanCatsMessages.MisingCatsTraverse
   )
   sealed protected trait CatsTraverse[F[*[*]]]
   private[OrphanCats] object CatsTraverse {

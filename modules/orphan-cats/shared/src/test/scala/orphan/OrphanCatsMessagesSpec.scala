@@ -6,59 +6,62 @@ import hedgehog.runner.*
 /** @author Kevin Lee
   * @since 2025-08-23
   */
-object ExpectedMessagesSpec extends Properties {
+object OrphanCatsMessagesSpec extends Properties {
   private val ExpectedDependency = "\"org.typelevel\" %% \"cats-core\" % CATS_VERSION"
 
   override def tests: List[Test] = List(
     example(
-      "ExpectedMessages.ExpectedMessageForCatsShow should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsShow should contain expected strings",
       testExpectedMessageForCatsShow
     ),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsInvariant should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsInvariant should contain expected strings",
       testExpectedMessageForCatsInvariant
     ),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsContravariant should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsContravariant should contain expected strings",
       testExpectedMessageForCatsContravariant
     ),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsFunctor should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsFunctor should contain expected strings",
       testExpectedMessageForCatsFunctor
     ),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsApplicative should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsApplicative should contain expected strings",
       testExpectedMessageForCatsApplicative
     ),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsMonad should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsMonad should contain expected strings",
       testExpectedMessageForCatsMonad
     ),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsTraverse should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsTraverse should contain expected strings",
       testExpectedMessageForCatsTraverse
     ),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsSemigroup should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsSemigroup should contain expected strings",
       testExpectedMessageForCatsSemigroup
     ),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsMonoid should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsMonoid should contain expected strings",
       testExpectedMessageForCatsMonoid
     ),
-    example("ExpectedMessages.ExpectedMessageForCatsEq should contain expected strings", testExpectedMessageForCatsEq),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsHash should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsEq should contain expected strings",
+      testExpectedMessageForCatsEq
+    ),
+    example(
+      "OrphanCatsMessages.ExpectedMessageForCatsHash should contain expected strings",
       testExpectedMessageForCatsHash
     ),
     example(
-      "ExpectedMessages.ExpectedMessageForCatsOrder should contain expected strings",
+      "OrphanCatsMessages.ExpectedMessageForCatsOrder should contain expected strings",
       testExpectedMessageForCatsOrder
     ),
   )
 
   def testExpectedMessageForCatsShow: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsShow
+    val message = OrphanCatsMessages.MisingCatsShow
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsShow")(_.contains(_)),
@@ -73,7 +76,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsInvariant: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsInvariant
+    val message = OrphanCatsMessages.MisingCatsInvariant
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsInvariant")(_.contains(_)),
@@ -88,7 +91,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsContravariant: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsContravariant
+    val message = OrphanCatsMessages.MisingCatsContravariant
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsContravariant")(_.contains(_)),
@@ -103,7 +106,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsFunctor: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsFunctor
+    val message = OrphanCatsMessages.MisingCatsFunctor
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsFunctor")(_.contains(_)),
@@ -118,7 +121,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsApplicative: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsApplicative
+    val message = OrphanCatsMessages.MisingCatsApplicative
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsApplicative")(_.contains(_)),
@@ -133,7 +136,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsMonad: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsMonad
+    val message = OrphanCatsMessages.MisingCatsMonad
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsMonad")(_.contains(_)),
@@ -148,7 +151,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsTraverse: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsTraverse
+    val message = OrphanCatsMessages.MisingCatsTraverse
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsTraverse")(_.contains(_)),
@@ -163,7 +166,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsSemigroup: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsSemigroup
+    val message = OrphanCatsMessages.MisingCatsSemigroup
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsSemigroup")(_.contains(_)),
@@ -178,7 +181,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsMonoid: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsMonoid
+    val message = OrphanCatsMessages.MisingCatsMonoid
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsMonoid")(_.contains(_)),
@@ -193,7 +196,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsEq: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsEq
+    val message = OrphanCatsMessages.MisingCatsEq
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsEq")(_.contains(_)),
@@ -208,7 +211,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsHash: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsHash
+    val message = OrphanCatsMessages.MisingCatsHash
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsHash")(_.contains(_)),
@@ -223,7 +226,7 @@ object ExpectedMessagesSpec extends Properties {
   }
 
   def testExpectedMessageForCatsOrder: Result = {
-    val message = ExpectedMessages.ExpectedMessageForCatsOrder
+    val message = OrphanCatsMessages.MisingCatsOrder
     Result.all(
       List(
         Result.diffNamed("Should contain instance name", message, "CatsOrder")(_.contains(_)),

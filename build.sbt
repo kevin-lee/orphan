@@ -48,6 +48,7 @@ lazy val orphan = (project in file("."))
     orphanCatsTestWithCatsJvm,
     orphanCatsTestWithCatsJs,
     orphanCatsTestWithCatsNative,
+    ///
     orphanCirceJvm,
     orphanCirceJs,
     orphanCirceNative,
@@ -60,6 +61,11 @@ lazy val orphan = (project in file("."))
     orphanCirceTestWithCirceJvm,
     orphanCirceTestWithCirceJs,
     orphanCirceTestWithCirceNative,
+    ///
+    orphanSprayJsonJvm,
+    orphanSprayJsonTestJvm,
+    orphanSprayJsonTestWithoutSprayJsonJvm,
+    orphanSprayJsonTestWithSprayJsonJvm,
   )
 
 lazy val orphanCats       = module("cats", crossProject(JVMPlatform, JSPlatform, NativePlatform))
@@ -155,6 +161,50 @@ lazy val orphanCirceTestWithCirceJvm    = orphanCirceTestWithCirce.jvm
 lazy val orphanCirceTestWithCirceJs     = orphanCirceTestWithCirce.js.settings(jsCommonSettings)
 lazy val orphanCirceTestWithCirceNative = orphanCirceTestWithCirce.native.settings(nativeSettings)
 
+lazy val orphanSprayJson    = module("spray-json", crossProject(JVMPlatform))
+  .settings(
+    libraryDependencies ++= List(
+      libs.sprayJson % Optional,
+    ) ++ (
+      if (isScala3(scalaVersion.value)) List.empty
+      else
+        List(
+//          libs.scalacCompatAnnotation,
+          libs.tests.scalaReflect.value
+        )
+    ),
+  )
+lazy val orphanSprayJsonJvm = orphanSprayJson.jvm
+
+lazy val orphanSprayJsonTest    = module("spray-json-test", crossProject(JVMPlatform))
+  .settings(noPublish)
+  .settings(
+    libraryDependencies ++= List(libs.sprayJson % Optional),
+  )
+  .dependsOn(orphanSprayJson % props.IncludeTest)
+lazy val orphanSprayJsonTestJvm = orphanSprayJsonTest.jvm
+
+lazy val orphanSprayJsonTestWithoutSprayJson    =
+  module("spray-json-test-without-spray-json", crossProject(JVMPlatform))
+    .settings(noPublish)
+    .settings(
+      libraryDependencies ++= List(libs.tests.extrasTestingTools.value),
+      Test / libraryDependencies ~= (libs => libs.filterNot(_.name.startsWith("spray-json")))
+    )
+    .dependsOn(orphanSprayJsonTest % props.IncludeTest)
+lazy val orphanSprayJsonTestWithoutSprayJsonJvm = orphanSprayJsonTestWithoutSprayJson.jvm
+
+lazy val orphanSprayJsonTestWithSprayJson    =
+  module("spray-json-test-with-spray-json", crossProject(JVMPlatform))
+    .settings(noPublish)
+    .settings(
+      libraryDependencies ++= List(
+        libs.sprayJson % Test,
+      ),
+    )
+    .dependsOn(orphanSprayJsonTest % props.IncludeTest)
+lazy val orphanSprayJsonTestWithSprayJsonJvm = orphanSprayJsonTestWithSprayJson.jvm
+
 lazy val props =
   new {
 
@@ -195,6 +245,8 @@ lazy val props =
 
     val CirceVersion = "0.14.12"
 
+    val SprayJsonVersion = "1.3.6"
+
   }
 
 lazy val libs = new {
@@ -209,6 +261,8 @@ lazy val libs = new {
   lazy val circeLiteral = Def.setting("io.circe" %%% "circe-literal" % props.CirceVersion)
   lazy val circeParser  = Def.setting("io.circe" %%% "circe-parser" % props.CirceVersion)
   lazy val circeJawn    = Def.setting("io.circe" %%% "circe-jawn" % props.CirceVersion)
+
+  lazy val sprayJson = "io.spray" %% "spray-json" % props.SprayJsonVersion
 
   lazy val tests = new {
 

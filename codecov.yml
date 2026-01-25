@@ -4,6 +4,7 @@ ignore:
   - "website"
   - "**/OrphanCatsMessages.scala"
   - "**/OrphanCirceMessages.scala"
+  - "**/OrphanSprayJsonMessages.scala"
 
 comment:
   layout: "reach, diff, flags, files"

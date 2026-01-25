@@ -165,13 +165,6 @@ lazy val orphanSprayJson    = module("spray-json", crossProject(JVMPlatform))
   .settings(
     libraryDependencies ++= List(
       libs.sprayJson % Optional,
-    ) ++ (
-      if (isScala3(scalaVersion.value)) List.empty
-      else
-        List(
-//          libs.scalacCompatAnnotation,
-          libs.tests.scalaReflect.value
-        )
     ),
   )
 lazy val orphanSprayJsonJvm = orphanSprayJson.jvm

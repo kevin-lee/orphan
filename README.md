@@ -15,3 +15,34 @@ Adopt `orphan-cats`, and they're no longer orphans!
 |      orphan-circe | [![Maven Central Version](https://img.shields.io/maven-central/v/io.kevinlee/orphan-circe_3)](https://central.sonatype.com/artifact/io.kevinlee/orphan-circe_3)           |
 | orphan-spray-json | [![Maven Central Version](https://img.shields.io/maven-central/v/io.kevinlee/orphan-spray-json_3)](https://central.sonatype.com/artifact/io.kevinlee/orphan-spray-json_3) |
 
+
+## Adopt `orphan`s
+
+### orphan-cats
+```scala
+"io.kevinlee" %% "orphan-cats" % "0.6.0"
+```
+
+```scala
+libraryDependencies += "io.kevinlee" %% "orphan-cats" % "0.6.0"
+```
+
+### orphan-circe
+
+```scala
+"io.kevinlee" %% "orphan-circe" % "0.6.0"
+```
+
+```scala
+libraryDependencies += "io.kevinlee" %% "orphan-circe" % "0.6.0"
+```
+
+### orphan-spray-json
+
+```scala
+"io.kevinlee" %% "orphan-spray-json" % "0.6.0"
+```
+
+```scala
+libraryDependencies += "io.kevinlee" %% "orphan-spray-json" % "0.6.0"
+```

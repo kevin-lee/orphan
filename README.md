@@ -27,6 +27,15 @@ Adopt `orphan-cats`, and they're no longer orphans!
 libraryDependencies += "io.kevinlee" %% "orphan-cats" % "0.6.0"
 ```
 
+#### Examples
+* For Scala 2:
+  * [cats](https://github.com/kevin-lee/orphan/blob/751bc2d20e33258ec156e82f0283127393a7e94a/modules/orphan-cats/shared/src/test/scala-2/orphan_instance/OrphanCatsInstances.scala)
+  * [cats.kernel](https://github.com/kevin-lee/orphan/blob/751bc2d20e33258ec156e82f0283127393a7e94a/modules/orphan-cats/shared/src/test/scala-2/orphan_instance/OrphanCatsKernelInstances.scala)
+* For Scala 3:
+  * [cats](https://github.com/kevin-lee/orphan/blob/751bc2d20e33258ec156e82f0283127393a7e94a/modules/orphan-cats/shared/src/test/scala-3/orphan_instance/OrphanCatsInstances.scala)
+  * [cats.kernel](https://github.com/kevin-lee/orphan/blob/751bc2d20e33258ec156e82f0283127393a7e94a/modules/orphan-cats/shared/src/test/scala-3/orphan_instance/OrphanCatsKernelInstances.scala)
+
+
 ### orphan-circe
 
 ```scala
@@ -37,6 +46,10 @@ libraryDependencies += "io.kevinlee" %% "orphan-cats" % "0.6.0"
 libraryDependencies += "io.kevinlee" %% "orphan-circe" % "0.6.0"
 ```
 
+#### Examples
+* [For Scala 2](https://github.com/kevin-lee/orphan/blob/751bc2d20e33258ec156e82f0283127393a7e94a/modules/orphan-circe-test/shared/src/main/scala-2/orphan_instance/OrphanCirceInstances.scala)
+* [For Scala 3](https://github.com/kevin-lee/orphan/blob/751bc2d20e33258ec156e82f0283127393a7e94a/modules/orphan-circe-test/shared/src/main/scala-3/orphan_instance/OrphanCirceInstances.scala)
+
 ### orphan-spray-json
 
 ```scala
@@ -46,3 +59,7 @@ libraryDependencies += "io.kevinlee" %% "orphan-circe" % "0.6.0"
 ```scala
 libraryDependencies += "io.kevinlee" %% "orphan-spray-json" % "0.6.0"
 ```
+
+#### Examples
+* [For Scala 2](https://github.com/kevin-lee/orphan/blob/751bc2d20e33258ec156e82f0283127393a7e94a/modules/orphan-spray-json-test/shared/src/main/scala-2/orphan_instance/OrphanSprayJsonInstances.scala)
+* [For Scala 3](https://github.com/kevin-lee/orphan/blob/751bc2d20e33258ec156e82f0283127393a7e94a/modules/orphan-spray-json-test/shared/src/main/scala-3/orphan_instance/OrphanSprayJsonInstances.scala)

@@ -12,6 +12,12 @@ on:
     # Weekly: catch 3.10 nightly drift even without code changes.
     - cron: "0 6 * * 1"
 
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
   pull_request:
     branches:
       - main

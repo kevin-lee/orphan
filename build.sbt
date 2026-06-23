@@ -198,6 +198,230 @@ lazy val orphanSprayJsonTestWithSprayJson    =
     .dependsOn(orphanSprayJsonTest % props.IncludeTest)
 lazy val orphanSprayJsonTestWithSprayJsonJvm = orphanSprayJsonTestWithSprayJson.jvm
 
+/* ===== orphan #96 "non-accessible instance" guard modules (Scala 3.8.4 / 3.10-nightly) =====
+ * Scala 3 PRs #25516/#25608/#25367 stop inferring implicit/given instances from
+ * non-accessible companion objects. These modules recompile the existing
+ * marker/instance/spec sources under the newer Scala 3 versions (where that change
+ * lands) to prove the markers still resolve. They are NOT aggregated and NOT published.
+ * They disable WartRemover/Tpolecat/semanticdb/scalafix because those per-Scala-version
+ * compiler plugins have no 3.8.4/3.10-nightly artifacts.
+ */
+
+/** Resolve the latest Scala 3.10 nightly. Precedence:
+  *   1. `ORPHAN_SCALA_310_NIGHTLY` env var (CI pins the exact nightly);
+  *   2. the nightlies `maven-metadata.xml` (latest `3.10.x-...-NIGHTLY`);
+  *   3. a pinned known-good fallback (keeps offline/CI deterministic).
+  */
+def latest310Nightly(): String = {
+  val fallback = "3.10.0-RC1-bin-20260621-b3a04ea-NIGHTLY"
+  sys.env.get("ORPHAN_SCALA_310_NIGHTLY").filter(_.nonEmpty).getOrElse {
+    val metadataUrl =
+      "https://repo.scala-lang.org/artifactory/maven-nightlies/org/scala-lang/scala3-library_3/maven-metadata.xml"
+    try {
+      val src = scala.io.Source.fromURL(metadataUrl)("UTF-8")
+
+      val body =
+        try src.mkString
+        finally src.close()
+
+      val versionRe = "<version>(3\\.10\\.[^<]*-NIGHTLY)</version>".r
+      versionRe.findAllMatchIn(body).map(_.group(1)).toList.lastOption.getOrElse(fallback)
+    } catch {
+      case _: Throwable => fallback
+    }
+  }
+}
+
+lazy val nonAccessibleInstanceProps = new {
+  val Scala3Baseline                  = props.Scala3Version // "3.3.3"
+  val Scala384                        = "3.8.4"
+  lazy val Scala310Nightly: String    = latest310Nightly()
+  lazy val ScalaVersions: Seq[String] =
+    Seq(Scala3Baseline, Scala384, Scala310Nightly)
+  val ScalaNightlyResolver            =
+    "scala-nightlies".at("https://repo.scala-lang.org/artifactory/maven-nightlies/")
+}
+
+/** Bare JVM-only test project: does NOT use the module() helper, so none of
+  * WartRemover/Tpolecat/semanticdb/scalafix is injected.
+  */
+def nonAccessibleInstanceModule(id: String): Project =
+  Project(id = id, base = file(s"modules/$id"))
+    .disablePlugins(wartremover.WartRemover, org.typelevel.sbt.tpolecat.TpolecatPlugin)
+    .settings(noPublish)
+    .settings(
+      name := id,
+      fork := true,
+      scalaVersion := nonAccessibleInstanceProps.Scala3Baseline,
+      crossScalaVersions := nonAccessibleInstanceProps.ScalaVersions,
+      semanticdbEnabled := false,
+      scalafixConfig := None,
+      /* kind-projector is required for the markers' `F[*[*]]` syntax (normally supplied by sbt-tpolecat,
+       * which we disable here). The flag was renamed `-Ykind-projector` -> `-Xkind-projector` in 3.4+.
+       * `-no-indent` matches the project's brace style.
+       *
+       * `-deprecation` surfaces the FULL issue-#96 message (otherwise it is summarized as "there were N
+       * deprecation warnings" and `-Wconf`'s `msg=` cannot match it); `-Wconf` then promotes ONLY that
+       * deprecation ("...not accessible here. In Scala 3.10, this implicit will no longer be found") to a
+       * hard ERROR. Without this, on 3.8.4 the bug is only a warning, so the -with test would falsely PASS
+       * even when the marker companion is inaccessible (on the 3.10 nightly it is already a resolution
+       * error). This is what makes the guard actually fail when the fix is missing.
+       */
+      scalacOptions := List("-no-indent", "-deprecation", "-Wconf:msg=not accessible here:e") ++ (
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((3, minor)) if minor <= 3 => List("-Ykind-projector")
+          case _ => List("-Xkind-projector")
+        }
+      ),
+      resolvers += nonAccessibleInstanceProps.ScalaNightlyResolver,
+      libraryDependencies ++= libs.tests.hedgehog.value,
+    )
+
+/** core: markers (Compile) + instances (Test), cats as % Optional. Optional is compile-scope and
+  * NON-propagating, so the -without sibling's typer does not get cats from this module's classpath —
+  * exactly mirroring orphanCats (cats % Optional) + its test instances.
+  */
+lazy val orphanCatsNonAccessibleInstanceCore = nonAccessibleInstanceModule("orphan-cats-non-accessible-instance-core")
+  .settings(
+    libraryDependencies += libs.cats.value % Optional,
+    Compile / unmanagedSourceDirectories ++= List(
+      file("modules") / "orphan-cats" / "shared" / "src" / "main" / "scala-3" / "orphan",
+      file("modules") / "orphan-cats" / "shared" / "src" / "main" / "scala" / "orphan",
+    ),
+    Test / unmanagedSourceDirectories ++= List(
+      file("modules") / "orphan-cats" / "shared" / "src" / "test" / "scala-3" / "orphan_instance",
+    ),
+  )
+
+lazy val orphanCatsNonAccessibleInstanceWith = nonAccessibleInstanceModule("orphan-cats-non-accessible-instance-with")
+  .dependsOn(orphanCatsNonAccessibleInstanceCore % props.IncludeTest)
+  .settings(
+    libraryDependencies += libs.cats.value % Test, // cats present so the with-specs resolve & run
+    Test / unmanagedSourceDirectories ++= List(
+      file("modules") / "orphan-cats-test-with-cats" / "shared" / "src" / "test" / "scala",
+    ),
+  )
+
+lazy val orphanCatsNonAccessibleInstanceWithout =
+  nonAccessibleInstanceModule("orphan-cats-non-accessible-instance-without")
+    .dependsOn(orphanCatsNonAccessibleInstanceCore % props.IncludeTest)
+    .settings(
+      // cats genuinely absent here => the marker's cats.Monad return type fails to load =>
+      // typeCheckErrors sees @implicitNotFound (the degradation contract).
+      excludeDependencies += ExclusionRule(organization = "org.typelevel"),
+      Test / unmanagedSourceDirectories ++= List(
+        file("modules") / "orphan-cats-test-without-cats" / "shared" / "src" / "test" / "scala-3",
+      ),
+    )
+
+// circe core: markers (Compile, circe % Optional) + instances (Test). circe instances live in the
+// orphan-circe-test module's MAIN scope; here they are placed in Test so the with/without siblings
+// consume them via test->test (these modules are test-only).
+lazy val orphanCirceNonAccessibleInstanceCore =
+  nonAccessibleInstanceModule("orphan-circe-non-accessible-instance-core")
+    .settings(
+      // core (markers) needs circe-core; the instances additionally use circe-generic's semiauto derivation.
+      libraryDependencies ++= List(
+        libs.circeCore.value    % Optional,
+        libs.circeGeneric.value % Optional,
+      ),
+      Compile / unmanagedSourceDirectories ++= List(
+        file("modules") / "orphan-circe" / "shared" / "src" / "main" / "scala-3" / "orphan",
+        file("modules") / "orphan-circe" / "shared" / "src" / "main" / "scala" / "orphan",
+      ),
+      Test / unmanagedSourceDirectories ++= List(
+        file("modules") / "orphan-circe-test" / "shared" / "src" / "main" / "scala-3" / "orphan_instance",
+      ),
+    )
+
+lazy val orphanCirceNonAccessibleInstanceWith =
+  nonAccessibleInstanceModule("orphan-circe-non-accessible-instance-with")
+    .dependsOn(orphanCirceNonAccessibleInstanceCore % props.IncludeTest)
+    .settings(
+      libraryDependencies ++= List(
+        libs.circeCore.value    % Test,
+        libs.circeGeneric.value % Test,
+        libs.circeLiteral.value % Test,
+        libs.circeParser.value  % Test,
+        libs.circeJawn.value    % Test,
+      ),
+      Test / unmanagedSourceDirectories ++= List(
+        file("modules") / "orphan-circe-test-with-circe" / "shared" / "src" / "test" / "scala",
+      ),
+    )
+
+lazy val orphanCirceNonAccessibleInstanceWithout =
+  nonAccessibleInstanceModule("orphan-circe-non-accessible-instance-without")
+    .dependsOn(orphanCirceNonAccessibleInstanceCore % props.IncludeTest)
+    .settings(
+      excludeDependencies += ExclusionRule(organization = "io.circe"),
+      Test / unmanagedSourceDirectories ++= List(
+        file("modules") / "orphan-circe-test-without-circe" / "shared" / "src" / "test" / "scala-3",
+      ),
+    )
+
+// spray-json core: markers (Compile, spray-json % Optional) + instances (Test).
+lazy val orphanSprayJsonNonAccessibleInstanceCore =
+  nonAccessibleInstanceModule("orphan-spray-json-non-accessible-instance-core")
+    .settings(
+      libraryDependencies += libs.sprayJson % Optional,
+      Compile / unmanagedSourceDirectories ++= List(
+        file("modules") / "orphan-spray-json" / "shared" / "src" / "main" / "scala-3" / "orphan",
+        file("modules") / "orphan-spray-json" / "shared" / "src" / "main" / "scala" / "orphan",
+      ),
+      Test / unmanagedSourceDirectories ++= List(
+        file("modules") / "orphan-spray-json-test" / "shared" / "src" / "main" / "scala-3" / "orphan_instance",
+      ),
+    )
+
+lazy val orphanSprayJsonNonAccessibleInstanceWith =
+  nonAccessibleInstanceModule("orphan-spray-json-non-accessible-instance-with")
+    .dependsOn(orphanSprayJsonNonAccessibleInstanceCore % props.IncludeTest)
+    .settings(
+      libraryDependencies += libs.sprayJson % Test,
+      Test / unmanagedSourceDirectories ++= List(
+        file("modules") / "orphan-spray-json-test-with-spray-json" / "shared" / "src" / "test" / "scala",
+      ),
+    )
+
+lazy val orphanSprayJsonNonAccessibleInstanceWithout =
+  nonAccessibleInstanceModule("orphan-spray-json-non-accessible-instance-without")
+    .dependsOn(orphanSprayJsonNonAccessibleInstanceCore % props.IncludeTest)
+    .settings(
+      excludeDependencies += ExclusionRule(organization = "io.spray"),
+      Test / unmanagedSourceDirectories ++= List(
+        file("modules") / "orphan-spray-json-test-without-spray-json" / "shared" / "src" / "test" / "scala-3",
+      ),
+    )
+
+// Runs ONLY the issue-#96 (non-accessible instance) tests. Cross-build with `+`, e.g.
+//   sbt "++3.8.4!" runNonAccessibleInstanceTests
+addCommandAlias(
+  "runNonAccessibleInstanceTests",
+  Seq(
+    "orphan-cats-non-accessible-instance-with/test",
+    "orphan-cats-non-accessible-instance-without/test",
+    "orphan-circe-non-accessible-instance-with/test",
+    "orphan-circe-non-accessible-instance-without/test",
+    "orphan-spray-json-non-accessible-instance-with/test",
+    "orphan-spray-json-non-accessible-instance-without/test",
+  ).mkString(";", ";", ""),
+)
+addCommandAlias(
+  "cleanNonAccessibleInstanceTests",
+  Seq(
+    "orphan-cats-non-accessible-instance-core/clean",
+    "orphan-cats-non-accessible-instance-with/clean",
+    "orphan-cats-non-accessible-instance-without/clean",
+    "orphan-circe-non-accessible-instance-core/clean",
+    "orphan-circe-non-accessible-instance-with/clean",
+    "orphan-circe-non-accessible-instance-without/clean",
+    "orphan-spray-json-non-accessible-instance-core/clean",
+    "orphan-spray-json-non-accessible-instance-with/clean",
+    "orphan-spray-json-non-accessible-instance-without/clean",
+  ).mkString(";", ";", ""),
+)
+
 lazy val props =
   new {
 

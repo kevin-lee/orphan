@@ -16,7 +16,7 @@ private[orphan] object OrphanSprayJson {
     msg = OrphanSprayJsonMessages.MissingSprayJsonJsonWriter
   )
   sealed protected trait SprayJsonJsonWriter[F[*]]
-  private[orphan] object SprayJsonJsonWriter {
+  object SprayJsonJsonWriter {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getSprayJsonJsonWriter: SprayJsonJsonWriter[spray.json.JsonWriter] =
       null // scalafix:ok DisableSyntax.null
@@ -26,7 +26,7 @@ private[orphan] object OrphanSprayJson {
     msg = OrphanSprayJsonMessages.MissingSprayJsonJsonReader
   )
   sealed protected trait SprayJsonJsonReader[F[*]]
-  private[orphan] object SprayJsonJsonReader {
+  object SprayJsonJsonReader {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getSprayJsonJsonReader: SprayJsonJsonReader[spray.json.JsonReader] =
       null // scalafix:ok DisableSyntax.null
@@ -36,7 +36,7 @@ private[orphan] object OrphanSprayJson {
     msg = OrphanSprayJsonMessages.MissingSprayJsonJsonFormat
   )
   sealed protected trait SprayJsonJsonFormat[F[*]]
-  private[orphan] object SprayJsonJsonFormat {
+  object SprayJsonJsonFormat {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getSprayJsonJsonFormat: SprayJsonJsonFormat[spray.json.JsonFormat] =
       null // scalafix:ok DisableSyntax.null

@@ -15,7 +15,7 @@ private[orphan] object OrphanCirce {
     msg = OrphanCirceMessages.MissingCirceEncoder
   )
   sealed protected trait CirceEncoder[F[*]]
-  private[OrphanCirce] object CirceEncoder {
+  object CirceEncoder {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCirceEncoder: CirceEncoder[io.circe.Encoder] =
       null // scalafix:ok DisableSyntax.null
@@ -25,14 +25,14 @@ private[orphan] object OrphanCirce {
     msg = OrphanCirceMessages.MissingCirceDecoder
   )
   sealed protected trait CirceDecoder[F[*]]
-  private[OrphanCirce] object CirceDecoder {
+  object CirceDecoder {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCirceDecoder: CirceDecoder[io.circe.Decoder] =
       null // scalafix:ok DisableSyntax.null
   }
 
-  final abstract private class CirceIsAvailable
-  private object CirceIsAvailable {
+  sealed abstract class CirceIsAvailable
+  object CirceIsAvailable {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCirceIsAvailable[F[*]: CirceEncoder]: CirceIsAvailable =
       null // scalafix:ok DisableSyntax.null
@@ -42,7 +42,7 @@ private[orphan] object OrphanCirce {
     msg = OrphanCirceMessages.MissingCirceCodec
   )
   sealed protected trait CirceCodec[F[*]]
-  private[OrphanCirce] object CirceCodec {
+  object CirceCodec {
     type CirceCodecEncoderDecoder[A] = io.circe.Codec[A] & io.circe.Encoder[A] & io.circe.Decoder[A]
 
     @SuppressWarnings(Array("org.wartremover.warts.Null"))

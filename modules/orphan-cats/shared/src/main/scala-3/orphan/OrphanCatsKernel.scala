@@ -18,7 +18,7 @@ private[orphan] object OrphanCatsKernel {
     msg = OrphanCatsMessages.MissingCatsSemigroup
   )
   sealed protected trait CatsSemigroup[F[*]]
-  private[OrphanCatsKernel] object CatsSemigroup {
+  object CatsSemigroup {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsSemigroup: CatsSemigroup[cats.kernel.Semigroup] =
       null // scalafix:ok DisableSyntax.null
@@ -28,7 +28,7 @@ private[orphan] object OrphanCatsKernel {
     msg = OrphanCatsMessages.MissingCatsMonoid
   )
   sealed protected trait CatsMonoid[F[*]]
-  private[OrphanCatsKernel] object CatsMonoid {
+  object CatsMonoid {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsMonoid: CatsMonoid[cats.kernel.Monoid] =
       null // scalafix:ok DisableSyntax.null
@@ -38,7 +38,7 @@ private[orphan] object OrphanCatsKernel {
     msg = OrphanCatsMessages.MissingCatsEq
   )
   sealed protected trait CatsEq[F[*]]
-  private[OrphanCatsKernel] object CatsEq {
+  object CatsEq {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsEq: CatsEq[cats.kernel.Eq] =
       null // scalafix:ok DisableSyntax.null
@@ -48,7 +48,7 @@ private[orphan] object OrphanCatsKernel {
     msg = OrphanCatsMessages.MissingCatsHash
   )
   sealed protected trait CatsHash[F[*]]
-  private[OrphanCatsKernel] object CatsHash {
+  object CatsHash {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsHash: CatsHash[cats.kernel.Hash] =
       null // scalafix:ok DisableSyntax.null
@@ -58,7 +58,7 @@ private[orphan] object OrphanCatsKernel {
     msg = OrphanCatsMessages.MissingCatsOrder
   )
   sealed protected trait CatsOrder[F[*]]
-  private[OrphanCatsKernel] object CatsOrder {
+  object CatsOrder {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsOrder: CatsOrder[cats.kernel.Order] =
       null // scalafix:ok DisableSyntax.null

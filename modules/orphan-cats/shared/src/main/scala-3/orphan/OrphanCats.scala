@@ -22,7 +22,7 @@ private[orphan] object OrphanCats {
     msg = OrphanCatsMessages.MissingCatsShow
   )
   sealed protected trait CatsShow[F[*]]
-  private[OrphanCats] object CatsShow {
+  object CatsShow {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsShow: CatsShow[cats.Show] =
       null // scalafix:ok DisableSyntax.null
@@ -32,7 +32,7 @@ private[orphan] object OrphanCats {
     msg = OrphanCatsMessages.MissingCatsInvariant
   )
   sealed protected trait CatsInvariant[F[*[*]]]
-  private[OrphanCats] object CatsInvariant {
+  object CatsInvariant {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsInvariant: CatsInvariant[cats.Invariant] =
       null // scalafix:ok DisableSyntax.null
@@ -42,7 +42,7 @@ private[orphan] object OrphanCats {
     msg = OrphanCatsMessages.MissingCatsContravariant
   )
   sealed protected trait CatsContravariant[F[*[*]]]
-  private[OrphanCats] object CatsContravariant {
+  object CatsContravariant {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsContravariant: CatsContravariant[cats.Contravariant] =
       null // scalafix:ok DisableSyntax.null
@@ -52,7 +52,7 @@ private[orphan] object OrphanCats {
     msg = OrphanCatsMessages.MissingCatsFunctor
   )
   sealed protected trait CatsFunctor[F[*[*]]]
-  private[OrphanCats] object CatsFunctor {
+  object CatsFunctor {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsFunctor: CatsFunctor[cats.Functor] =
       null // scalafix:ok DisableSyntax.null
@@ -62,7 +62,7 @@ private[orphan] object OrphanCats {
     msg = OrphanCatsMessages.MissingCatsApplicative
   )
   sealed protected trait CatsApplicative[F[*[*]]]
-  private[OrphanCats] object CatsApplicative {
+  object CatsApplicative {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsApplicative: CatsApplicative[cats.Applicative] =
       null // scalafix:ok DisableSyntax.null
@@ -72,7 +72,7 @@ private[orphan] object OrphanCats {
     msg = OrphanCatsMessages.MissingCatsMonad
   )
   sealed protected trait CatsMonad[F[*[*]]]
-  private[OrphanCats] object CatsMonad {
+  object CatsMonad {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsMonad: CatsMonad[cats.Monad] =
       null // scalafix:ok DisableSyntax.null
@@ -82,7 +82,7 @@ private[orphan] object OrphanCats {
     msg = OrphanCatsMessages.MissingCatsTraverse
   )
   sealed protected trait CatsTraverse[F[*[*]]]
-  private[OrphanCats] object CatsTraverse {
+  object CatsTraverse {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     final inline given getCatsTraverse: CatsTraverse[cats.Traverse] =
       null // scalafix:ok DisableSyntax.null

@@ -20,11 +20,11 @@ Adopt `orphan-cats`, and they're no longer orphans!
 
 ### orphan-cats
 ```scala
-"io.kevinlee" %% "orphan-cats" % "0.6.0"
+"io.kevinlee" %% "orphan-cats" % "0.7.0"
 ```
 
 ```scala
-libraryDependencies += "io.kevinlee" %% "orphan-cats" % "0.6.0"
+libraryDependencies += "io.kevinlee" %% "orphan-cats" % "0.7.0"
 ```
 
 #### Examples
@@ -39,11 +39,11 @@ libraryDependencies += "io.kevinlee" %% "orphan-cats" % "0.6.0"
 ### orphan-circe
 
 ```scala
-"io.kevinlee" %% "orphan-circe" % "0.6.0"
+"io.kevinlee" %% "orphan-circe" % "0.7.0"
 ```
 
 ```scala
-libraryDependencies += "io.kevinlee" %% "orphan-circe" % "0.6.0"
+libraryDependencies += "io.kevinlee" %% "orphan-circe" % "0.7.0"
 ```
 
 #### Examples
@@ -53,11 +53,11 @@ libraryDependencies += "io.kevinlee" %% "orphan-circe" % "0.6.0"
 ### orphan-spray-json
 
 ```scala
-"io.kevinlee" %% "orphan-spray-json" % "0.6.0"
+"io.kevinlee" %% "orphan-spray-json" % "0.7.0"
 ```
 
 ```scala
-libraryDependencies += "io.kevinlee" %% "orphan-spray-json" % "0.6.0"
+libraryDependencies += "io.kevinlee" %% "orphan-spray-json" % "0.7.0"
 ```
 
 #### Examples
